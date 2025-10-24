@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useCart } from '../context/CartContext.js';
+import { useCart } from '../context/CartContext';
 import './Checkout.css';
 
 const Checkout = ({ onClose, onComplete }) => {

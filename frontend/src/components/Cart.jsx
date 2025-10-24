@@ -1,4 +1,4 @@
-import { useCart } from '../context/CartContext.js';
+import { useCart } from '../context/CartContext';
 import './Cart.css';
 
 const Cart = ({ onClose, onCheckout }) => {

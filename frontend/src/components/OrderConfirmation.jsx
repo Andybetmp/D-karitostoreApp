@@ -1,7 +1,8 @@
 import './OrderConfirmation.css';
 
 const OrderConfirmation = ({ onClose }) => {
-  const orderNumber = Math.random().toString(36).substr(2, 9).toUpperCase();
+  // Generate a more unique order number using timestamp and random values
+  const orderNumber = `ORD-${Date.now()}-${Math.floor(Math.random() * 10000).toString().padStart(4, '0')}`;
 
   return (
     <div className="modal-overlay" onClick={onClose}>
