@@ -219,6 +219,7 @@ const LoginModal = () => {
     const userData = {
       email: formData.email,
       name: activeTab === 'signup' ? formData.name : formData.email.split('@')[0],
+      picture: null,
       provider: 'email'
     };
     login(userData);

@@ -1,8 +1,25 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, ReactNode } from 'react';
 
-const AuthContext = createContext();
+interface User {
+  name: string;
+  email: string;
+  picture: string | null;
+  provider: string;
+}
 
-export const useAuth = () => {
+interface AuthContextType {
+  user: User | null;
+  isLoginModalOpen: boolean;
+  login: (userData: User) => void;
+  loginWithGoogle: (credentialResponse: any) => void;
+  logout: () => void;
+  openLoginModal: () => void;
+  closeLoginModal: () => void;
+}
+
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+export const useAuth = (): AuthContextType => {
   const context = useContext(AuthContext);
   if (!context) {
     throw new Error('useAuth must be used within an AuthProvider');
@@ -10,22 +27,26 @@ export const useAuth = () => {
   return context;
 };
 
-export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+interface AuthProviderProps {
+  children: ReactNode;
+}
 
-  const login = (userData) => {
+export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
+  const [user, setUser] = useState<User | null>(null);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState<boolean>(false);
+
+  const login = (userData: User) => {
     setUser(userData);
     setIsLoginModalOpen(false);
     // Aquí se conectará con el backend posteriormente
     console.log('User logged in:', userData);
   };
 
-  const loginWithGoogle = (credentialResponse) => {
+  const loginWithGoogle = (credentialResponse: any) => {
     // Aquí se procesará la respuesta de Google y se enviará al backend
     console.log('Google credential:', credentialResponse);
     // Por ahora, simulamos un usuario
-    const googleUser = {
+    const googleUser: User = {
       name: 'Google User',
       email: 'user@gmail.com',
       picture: null,
@@ -49,7 +70,7 @@ export const AuthProvider = ({ children }) => {
     setIsLoginModalOpen(false);
   };
 
-  const value = {
+  const value: AuthContextType = {
     user,
     isLoginModalOpen,
     login,

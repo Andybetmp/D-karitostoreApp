@@ -29,7 +29,7 @@ const DarkOverlay = styled.div`
   right: 0;
   z-index: 1;
 
-  background-color: ${(props) => `rgba(${props.theme.bodyRgba},0.6)`};
+  background-color: ${(props: any) => `rgba(${props.theme.bodyRgba},0.6)`};
 `;
 const Title = styled(motion.div)`
   position: absolute;
@@ -143,7 +143,7 @@ const CoverVideo = () => {
           Cada pieza, una historia de elegancia y carácter
         </motion.h2>
       </Title>
-      <video src={MainVideo} type="video/mp4" autoPlay muted loop />
+      <video src={MainVideo} autoPlay muted loop />
     </VideoContainer>
   );
 };
