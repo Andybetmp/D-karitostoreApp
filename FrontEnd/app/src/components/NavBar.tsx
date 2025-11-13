@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { motion } from "framer-motion";
 import { useLocomotiveScroll } from "react-locomotive-scroll";
 import LoginButton from "./LoginButton";
+import CartIcon from "./CartIcon";
 
 const NavContainer = styled(motion.div)`
   width: 100vw;
@@ -157,6 +158,7 @@ const NavBar = () => {
           new arrival
         </MenuItem>
         <LoginWrapper>
+          <CartIcon />
           <LoginButton />
         </LoginWrapper>
       </MenuItems>

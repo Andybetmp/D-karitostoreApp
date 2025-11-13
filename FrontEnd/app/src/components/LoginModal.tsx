@@ -165,7 +165,7 @@ const TabContainer = styled.div`
   border-bottom: 2px solid ${props => props.theme.grey};
 `;
 
-const Tab = styled.button`
+const Tab = styled.button<{ active: boolean }>`
   flex: 1;
   padding: 1rem;
   background: none;

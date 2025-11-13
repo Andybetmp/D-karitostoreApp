@@ -68,3 +68,41 @@ declare global {
     gtag: any;
   }
 }
+
+// Shopping Cart Types
+export interface Product {
+  id: string;
+  img: string;
+  title: string;
+  price?: number; // Optional, can be added later
+}
+
+export interface CartItem extends Product {
+  quantity: number;
+}
+
+export interface Order {
+  id: string;
+  user: {
+    name: string;
+    email: string;
+    phone: string;
+    address: string;
+  };
+  items: CartItem[];
+  total: number;
+  paymentMethod: 'card' | 'wallet';
+  cardDetails?: {
+    number: string;
+    expiry: string;
+    cvv: string;
+  };
+  createdAt: Date;
+}
+
+// Fix for styled-components Tab component
+declare module 'styled-components' {
+  export interface ThemedStyledProps<P, T> {
+    active?: boolean;
+  }
+}

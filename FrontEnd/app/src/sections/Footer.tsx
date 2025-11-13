@@ -180,11 +180,11 @@ const Footer = () => {
           >
             Made with &hearts;  &nbsp;
             <a
-              href=""
+              href="https://example.com"
               target="_blank"
               rel="noreferrer"
             >
-              
+              Developer
             </a>
           </span>
         </Bottom>

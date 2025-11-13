@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { useRef } from "react";
 
 import { motion } from "framer-motion";
+import { useCart } from "../context/CartContext";
 
 import img1 from "../assets/Images/1.webp";
 import img2 from "../assets/Images/2.webp";
@@ -133,7 +134,30 @@ const Item = styled(motion.div)`
   }
 `;
 
-const Product = ({ img, title = "" }) => {
+const AddToCartButton = styled.button`
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background-color: ${props => props.theme.text};
+  color: ${props => props.theme.body};
+  border: none;
+  border-radius: 4px;
+  font-size: ${props => props.theme.fontsm};
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: ${props => props.theme.grey};
+  }
+`;
+
+const Product = ({ img, title = "", id, price }) => {
+  const { addToCart } = useCart();
+
+  const handleAddToCart = () => {
+    addToCart({ id, img, title, price });
+  };
+
   return (
     <Item
       initial={{ filter: "grayscale(100%)" }}
@@ -143,6 +167,9 @@ const Product = ({ img, title = "" }) => {
     >
       <img src={img} alt={title} />
       <h1>{title}</h1>
+      <AddToCartButton onClick={handleAddToCart}>
+        Agregar al carrito
+      </AddToCartButton>
     </Item>
   );
 };
@@ -222,16 +249,16 @@ const Shop = () => {
         </p>
       </Left>
       <Right ref={horizontalRef}>
-        <Product img={img1} title="Man Basics" />
-        <Product img={img2} title="Tops" />
-        <Product img={img3} title="Sweatshirts" />
-        <Product img={img4} title="Ethnic Wear" />
-        <Product img={img5} title="Blazers" />
-        <Product img={img6} title="Suits" />
-        <Product img={img7} title="Antiques" />
-        <Product img={img8} title="Jewellery" />
-        <Product img={img9} title="Watches" />
-        <Product img={img10} title="Special Edition" />
+        <Product id="1" img={img1} title="Man Basics" price={50} />
+        <Product id="2" img={img2} title="Tops" price={40} />
+        <Product id="3" img={img3} title="Sweatshirts" price={60} />
+        <Product id="4" img={img4} title="Ethnic Wear" price={70} />
+        <Product id="5" img={img5} title="Blazers" price={80} />
+        <Product id="6" img={img6} title="Suits" price={100} />
+        <Product id="7" img={img7} title="Antiques" price={90} />
+        <Product id="8" img={img8} title="Jewellery" price={30} />
+        <Product id="9" img={img9} title="Watches" price={120} />
+        <Product id="10" img={img10} title="Special Edition" price={150} />
       </Right>
     </Section>
   );

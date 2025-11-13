@@ -5,6 +5,7 @@ import { LocomotiveScrollProvider } from "react-locomotive-scroll";
 import { useEffect, useRef, useState } from "react";
 import 'locomotive-scroll/dist/locomotive-scroll.css'
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import { Routes, Route } from 'react-router-dom';
 
 import Home from "./sections/Home";
 import { AnimatePresence } from "framer-motion";
@@ -16,7 +17,10 @@ import NewArrival from "./sections/NewArrival";
 import Footer from './sections/Footer';
 import Loader from "./components/Loader";
 import LoginModal from "./components/LoginModal";
+import CartModal from "./components/CartModal";
+import CheckoutForm from "./components/CheckoutForm";
 import { AuthProvider } from "./context/AuthContext";
+import { CartProvider } from "./context/CartContext";
 
 
 function App() {
@@ -36,44 +40,41 @@ function App() {
       <GlobalStyles />
       <GoogleOAuthProvider clientId="YOUR_GOOGLE_CLIENT_ID_HERE">
         <AuthProvider>
-          <ThemeProvider theme={dark}>
-            <LocomotiveScrollProvider
-              options={{
-                smooth: true,
-                // ... all available Locomotive Scroll instance options
-                smartphone:{
-                  smooth:true,
-                },
-                tablet:{
-                  smooth:true,
-                }
-              }}
-              watch={
-                [
-                  //..all the dependencies you want to watch to update the scroll.
-                  //  Basicaly, you would want to watch page/location changes
-                  //  For exemple, on Next.js you would want to watch properties like `router.asPath` (you may want to add more criterias if the instance should be update on locations with query parameters)
-                ]
-              }
-              containerRef={containerRef}
-            >
-            <AnimatePresence>
-            {loaded ? null : <Loader />}
-            </AnimatePresence>
-            <ScrollTriggerProxy />
-              <AnimatePresence>
-              <main className='App' data-scroll-container ref={containerRef}>
-                <Home />
-                <About />
-                <Shop />
-                <Banner />
-                <NewArrival />
-                <Footer />
-              </main>
-              </AnimatePresence>
-            </LocomotiveScrollProvider>
-            <LoginModal />
-          </ThemeProvider>
+          <CartProvider>
+            <ThemeProvider theme={dark}>
+              <Routes>
+                <Route path="/" element={
+                  <LocomotiveScrollProvider
+                    options={{
+                      smooth: true,
+                      smartphone: { smooth: true },
+                      tablet: { smooth: true }
+                    }}
+                    watch={[]}
+                    containerRef={containerRef}
+                  >
+                    <AnimatePresence>
+                      {loaded ? null : <Loader />}
+                    </AnimatePresence>
+                    <ScrollTriggerProxy />
+                    <AnimatePresence>
+                      <main className='App' data-scroll-container ref={containerRef}>
+                        <Home />
+                        <About />
+                        <Shop />
+                        <Banner />
+                        <NewArrival />
+                        <Footer />
+                      </main>
+                    </AnimatePresence>
+                    <LoginModal />
+                    <CartModal />
+                  </LocomotiveScrollProvider>
+                } />
+                <Route path="/checkout" element={<CheckoutForm />} />
+              </Routes>
+            </ThemeProvider>
+          </CartProvider>
         </AuthProvider>
       </GoogleOAuthProvider>
     </>
