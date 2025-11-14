@@ -1,0 +1,16 @@
+C:\Users\andyj\Documents\git1\D-karitostoreApp\BackEnd\auth-service\src\main\java\com\dkarito\authservice\domain\User.java
+C:\Users\andyj\Documents\git1\D-karitostoreApp\BackEnd\auth-service\src\main\java\com\dkarito\authservice\repository\UserRepository.java
+C:\Users\andyj\Documents\git1\D-karitostoreApp\BackEnd\auth-service\src\main\java\com\dkarito\authservice\AuthServiceApplication.java
+C:\Users\andyj\Documents\git1\D-karitostoreApp\BackEnd\auth-service\src\main\java\com\dkarito\authservice\security\AuthEntryPointJwt.java
+C:\Users\andyj\Documents\git1\D-karitostoreApp\BackEnd\auth-service\src\main\java\com\dkarito\authservice\dto\AuthRequest.java
+C:\Users\andyj\Documents\git1\D-karitostoreApp\BackEnd\auth-service\src\main\java\com\dkarito\authservice\security\UserDetailsServiceImpl.java
+C:\Users\andyj\Documents\git1\D-karitostoreApp\BackEnd\auth-service\src\main\java\com\dkarito\authservice\config\WebSecurityConfig.java
+C:\Users\andyj\Documents\git1\D-karitostoreApp\BackEnd\auth-service\src\main\java\com\dkarito\authservice\dto\UserProfile.java
+C:\Users\andyj\Documents\git1\D-karitostoreApp\BackEnd\auth-service\src\main\java\com\dkarito\authservice\controller\AuthController.java
+C:\Users\andyj\Documents\git1\D-karitostoreApp\BackEnd\auth-service\src\main\java\com\dkarito\authservice\security\AuthTokenFilter.java
+C:\Users\andyj\Documents\git1\D-karitostoreApp\BackEnd\auth-service\src\main\java\com\dkarito\authservice\dto\RefreshTokenRequest.java
+C:\Users\andyj\Documents\git1\D-karitostoreApp\BackEnd\auth-service\src\main\java\com\dkarito\authservice\dto\RegisterRequest.java
+C:\Users\andyj\Documents\git1\D-karitostoreApp\BackEnd\auth-service\src\main\java\com\dkarito\authservice\security\UserDetailsImpl.java
+C:\Users\andyj\Documents\git1\D-karitostoreApp\BackEnd\auth-service\src\main\java\com\dkarito\authservice\service\AuthService.java
+C:\Users\andyj\Documents\git1\D-karitostoreApp\BackEnd\auth-service\src\main\java\com\dkarito\authservice\dto\AuthResponse.java
+C:\Users\andyj\Documents\git1\D-karitostoreApp\BackEnd\auth-service\src\main\java\com\dkarito\authservice\security\JwtUtils.java

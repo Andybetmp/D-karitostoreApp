@@ -1,26 +1,23 @@
-# Modify Shopping Cart and Footer
+# Backend Setup and Testing TODO
 
-## Information Gathered
-- CartIcon.tsx: Current cart icon with counter, opens modal via openCart.
-- CartModal.tsx: Modal for cart, rendered only on home route.
-- Footer.tsx: Has ul with links, uses handleScroll for sections.
-- App.tsx: Routes defined, CartModal inside home route, LocomotiveScrollProvider only for home.
+## Database Setup
+- [x] Execute db-setup.sql to create 'dkarito' database and tables
+- [x] Confirm tables (users, products, inventory, orders, order_items, payments) and sample data created without errors
 
-## Plan
-- Create FloatingCartButton component: Fixed position bottom right, uses CartIcon styles, onClick opens cart modal.
-- Move CartModal outside Routes in App.tsx to make it available on all pages.
-- Add /admin route in App.tsx with placeholder component.
-- Modify Footer.tsx: Add "Gestión" li that navigates to /admin using useNavigate.
-- Add FloatingCartButton to App.tsx outside Routes.
+## Service Connections
+- [x] Verify each microservice connects to PostgreSQL using application.yml credentials (localhost:5432/dkarito, postgres/postgres)
 
-## Dependent Files to Edit
-- FrontEnd/app/src/components/FloatingCartButton.tsx (new)
-- FrontEnd/app/src/App.tsx
-- FrontEnd/app/src/sections/Footer.tsx
+## Service Startup
+- [x] Execute start-services.bat to build and start 6 microservices (auth:8081, product:8082, inventory:8083, order:8084, payment:8085) and API Gateway (8080)
+- [x] Confirm all services start without failures
 
-## Followup Steps
-- [x] Created FloatingCartButton component with fixed position, counter, and click handler.
-- [x] Moved CartModal outside Routes in App.tsx for global availability.
-- [x] Added /admin route with placeholder.
-- [x] Added "Gestión" button to Footer.tsx with navigation to /admin.
-- [x] Testing: Browser tool disabled, unable to perform live testing. Implementation follows best practices and should work as expected.
+## API Testing and Fixes
+- [ ] Fix auth login: Update DB password to valid BCrypt hash
+- [ ] Add GET /api/inventory endpoint to inventory-service
+- [ ] Add GET /api/payments endpoint to payment-service
+- [ ] Test all APIs: auth, product, order, inventory, payment, gateway
+- [ ] Verify gateway routes to services correctly
+
+## Final Confirmation
+- [ ] Confirm backend fully functional
+- [ ] Report PgAdmin access: localhost:5432, database 'dkarito', user 'postgres'
