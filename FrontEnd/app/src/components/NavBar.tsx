@@ -5,7 +5,7 @@ import { useLocomotiveScroll } from "react-locomotive-scroll";
 import LoginButton from "./LoginButton";
 import CartIcon from "./CartIcon";
 
-const NavContainer = styled(motion.div)`
+const NavContainer = styled(motion.div)<{ click: boolean }>`
   width: 100vw;
   z-index: 6;
   position: absolute;
@@ -44,7 +44,7 @@ const MenuItems = styled(motion.ul)`
 
 const MenuBtn = styled.li`
   background-color: ${(props) => `rgba(${props.theme.textRgba}, 0.7)`};
-  list-style-type: style none;
+  list-style-type: none;
   color: ${(props) => props.theme.body};
   width: 15rem;
   height: 2.5rem;
@@ -71,7 +71,7 @@ const MenuBtn = styled.li`
     height: 2rem;
   }
 `;
-const MenuItem = styled(motion.li)`
+const MenuItem = motion(styled.li`
   text-transform: uppercase;
   color: ${(props) => props.theme.text};
   cursor: pointer;
@@ -79,7 +79,7 @@ const MenuItem = styled(motion.li)`
     flex-direction: column;
     padding: 0.5rem 0;
   }
-`;
+`);
 
 const LoginWrapper = styled.li`
   display: flex;
@@ -132,28 +132,28 @@ const NavBar = () => {
         <MenuItem
           onClick={() => handleScroll("#home")}
           whileHover={{ scale: 1.1, y: -5 }}
-          whileTap={{ scale: 0.9, Y: 0 }}
+          whileTap={{ scale: 0.9, y: 0 }}
         >
           Home
         </MenuItem>
         <MenuItem
           onClick={() => handleScroll(".about")}
           whileHover={{ scale: 1.1, y: -5 }}
-          whileTap={{ scale: 0.9, Y: 0 }}
+          whileTap={{ scale: 0.9, y: 0 }}
         >
           about
         </MenuItem>
         <MenuItem
           onClick={() => handleScroll("#shop")}
           whileHover={{ scale: 1.1, y: -5 }}
-          whileTap={{ scale: 0.9, Y: 0 }}
+          whileTap={{ scale: 0.9, y: 0 }}
         >
           shop
         </MenuItem>
         <MenuItem
           onClick={() => handleScroll("#new-arrival")}
           whileHover={{ scale: 1.1, y: -5 }}
-          whileTap={{ scale: 0.9, Y: 0 }}
+          whileTap={{ scale: 0.9, y: 0 }}
         >
           new arrival
         </MenuItem>

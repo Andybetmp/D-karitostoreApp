@@ -4,6 +4,7 @@ import styled from "styled-components";
 import Logo from "../assets/Svgs/star_white_48dp.svg";
 import { motion } from "framer-motion";
 import { useLocomotiveScroll } from "react-locomotive-scroll";
+import { useNavigate } from "react-router-dom";
 
 const Section = styled.section`
   min-height: 100vh;
@@ -112,6 +113,7 @@ const Bottom = styled.div`
 
 const Footer = () => {
   const { scroll } = useLocomotiveScroll();
+  const navigate = useNavigate();
 
   const handleScroll = (id) => {
     let elem = document.querySelector(id);
@@ -121,6 +123,14 @@ const Footer = () => {
       duration: "2000",
       easing: [0.25, 0.0, 0.35, 1.0],
     });
+  };
+
+  const handleGestion = () => {
+    navigate('/admin');
+  };
+
+  const handleDeveloper = () => {
+    navigate('/login');
   };
 
   return (
@@ -144,6 +154,7 @@ const Footer = () => {
           <li onClick={() => handleScroll(".about")}>Sobre nosotros</li>
           <li onClick={() => handleScroll("#shop")}>Tienda</li>
           <li onClick={() => handleScroll("#new-arrival")}>Recien llegados</li>
+          <li onClick={handleGestion}>Gestión</li>
           <li>
             <a href="https://google.com" target="_blank" rel="noreferrer">
               Instagram
@@ -180,9 +191,8 @@ const Footer = () => {
           >
             Made with &hearts;  &nbsp;
             <a
-              href="https://example.com"
-              target="_blank"
-              rel="noreferrer"
+              onClick={handleDeveloper}
+              style={{ cursor: 'pointer' }}
             >
               Developer
             </a>

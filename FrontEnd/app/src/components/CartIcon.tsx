@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { FaShoppingCart } from 'react-icons/fa';
 import { useCart } from '../context/CartContext';
 
-const CartIconContainer = styled(motion.div)`
+const CartIconContainer = styled(motion.div as any)`
   position: relative;
   cursor: pointer;
   display: flex;
@@ -18,7 +18,7 @@ const CartIconContainer = styled(motion.div)`
   }
 `;
 
-const CartCount = styled(motion.span)`
+const CartCount = styled(motion.span as any)`
   position: absolute;
   top: -10px;
   right: -10px;

@@ -5,7 +5,7 @@ import { FaTimes, FaTrash } from 'react-icons/fa';
 import { useCart } from '../context/CartContext';
 import { useNavigate } from 'react-router-dom';
 
-const ModalOverlay = styled(motion.div)`
+const ModalOverlay = styled(motion.div as any)`
   position: fixed;
   top: 0;
   left: 0;
@@ -18,7 +18,7 @@ const ModalOverlay = styled(motion.div)`
   align-items: flex-start;
 `;
 
-const ModalContent = styled(motion.div)`
+const ModalContent = styled(motion.div as any)`
   width: 400px;
   max-width: 90vw;
   height: 100vh;

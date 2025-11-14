@@ -19,8 +19,11 @@ import Loader from "./components/Loader";
 import LoginModal from "./components/LoginModal";
 import CartModal from "./components/CartModal";
 import CheckoutForm from "./components/CheckoutForm";
+import FloatingCartButton from "./components/FloatingCartButton";
 import { AuthProvider } from "./context/AuthContext";
 import { CartProvider } from "./context/CartContext";
+import Login from "./pages/authentication/Login";
+import SignUp from "./pages/authentication/SignUp";
 
 
 function App() {
@@ -42,6 +45,8 @@ function App() {
         <AuthProvider>
           <CartProvider>
             <ThemeProvider theme={dark}>
+              <FloatingCartButton />
+              <CartModal />
               <Routes>
                 <Route path="/" element={
                   <LocomotiveScrollProvider
@@ -68,10 +73,12 @@ function App() {
                       </main>
                     </AnimatePresence>
                     <LoginModal />
-                    <CartModal />
                   </LocomotiveScrollProvider>
                 } />
                 <Route path="/checkout" element={<CheckoutForm />} />
+                <Route path="/admin" element={<div>Admin Panel - Coming Soon</div>} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/authentication/sign-up" element={<SignUp />} />
               </Routes>
             </ThemeProvider>
           </CartProvider>

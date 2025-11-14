@@ -15,7 +15,7 @@ const CheckoutContainer = styled.div`
   align-items: flex-start;
 `;
 
-const CheckoutForm = styled(motion.form)`
+const CheckoutForm = motion(styled.form`
   max-width: 600px;
   width: 100%;
   background-color: ${props => props.theme.grey};
@@ -26,7 +26,7 @@ const CheckoutForm = styled(motion.form)`
   @media (max-width: 48em) {
     padding: 1rem;
   }
-`;
+`);
 
 const Title = styled.h1`
   font-size: ${props => props.theme.fontxxl};

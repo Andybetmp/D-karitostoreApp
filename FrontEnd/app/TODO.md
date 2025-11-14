@@ -1,18 +1,7 @@
-# TODO: Add Shopping Cart and Checkout Module to D’Karito
+# TODO: Add Routing to React App
 
 ## Tasks
-- [ ] Update types.d.ts: Add interfaces for Product, CartItem, and Order
-- [ ] Create CartContext.tsx: Context for cart state (add, remove, clear, persist to localStorage)
-- [ ] Create CartIcon.tsx: Icon component with dynamic counter for header
-- [ ] Create CartModal.tsx: Modal/sidebar for cart display, with remove/clear/checkout buttons
-- [ ] Modify Shop.tsx: Add "Add to Cart" button to each product
-- [ ] Create CheckoutForm.tsx: Form for user details and payment simulation
-- [ ] Update App.tsx: Add BrowserRouter, routes for /shop and /checkout, wrap with CartProvider
-- [ ] Update NavBar.tsx: Add CartIcon to the menu
-- [ ] Update Home.tsx: Ensure NavBar is included if not already
-
-## Followup steps
-- [ ] Test cart functionality (add/remove items)
-- [ ] Test checkout form validation and simulation
-- [ ] Ensure responsiveness on mobile/tablet
-- [ ] Verify localStorage persistence
+- [x] Update tsconfig.json to add "baseUrl": "./src" for absolute imports
+- [x] Edit App.tsx to import SignUp component and add route for "/authentication/sign-up"
+- [ ] Restart development server to apply changes
+- [ ] Verify routing works by navigating to /authentication/sign-up
