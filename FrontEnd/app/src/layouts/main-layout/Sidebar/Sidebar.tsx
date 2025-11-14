@@ -1,7 +1,6 @@
 import { ReactElement } from 'react';
 import { Link, List, Toolbar } from '@mui/material';
 import navItems from 'data/nav-items';
-import SimpleBar from 'simplebar-react';
 import NavItem from './NavItem';
 import { drawerCloseWidth, drawerOpenWidth } from '..';
 import Image from 'components/base/Image';
@@ -36,7 +35,7 @@ const Sidebar = ({ open }: { open: boolean }): ReactElement => {
           />
         </Link>
       </Toolbar>
-      <SimpleBar style={{ maxHeight: '100vh' }}>
+      <div style={{ maxHeight: '100vh', overflow: 'auto' }}>
         <List
           component="nav"
           sx={{
@@ -50,7 +49,7 @@ const Sidebar = ({ open }: { open: boolean }): ReactElement => {
             <NavItem key={navItem.id} navItem={navItem} open={open} />
           ))}
         </List>
-      </SimpleBar>
+      </div>
     </>
   );
 };

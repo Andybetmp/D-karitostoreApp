@@ -1,119 +1,146 @@
 # D'Karito Store Backend
 
-Backend completo para la aplicación D'Karito Store, implementado con arquitectura de microservicios usando Spring Boot 3.x y Java 17.
+A microservices-based e-commerce backend built with Spring Boot, featuring authentication, product management, inventory, orders, payments, and API gateway.
 
-## Arquitectura
+## Architecture
 
-El backend está compuesto por 6 microservicios independientes:
+The backend consists of 6 microservices:
 
-- **auth-service**: Gestión de autenticación y autorización con JWT
-- **product-service**: CRUD de productos y categorías
-- **inventory-service**: Control de inventario y stock
-- **order-service**: Gestión de pedidos y órdenes
-- **payment-service**: Procesamiento de pagos simulados
-- **api-gateway**: Gateway de API con enrutamiento y CORS
+- **Auth Service** (Port 8081): User authentication and authorization with JWT
+- **Product Service** (Port 8082): Product catalog management
+- **Inventory Service** (Port 8083): Stock and inventory management
+- **Order Service** (Port 8084): Order processing and management
+- **Payment Service** (Port 8085): Payment processing
+- **API Gateway** (Port 8080): Centralized API routing and load balancing
 
-## Requisitos Previos
+## Prerequisites
 
-- Java 17 o superior
-- Maven 3.6+
-- PostgreSQL 12+ corriendo localmente
-- Base de datos: `dkarito` con usuario `postgres` y contraseña `postgres`
+- **Java 17+**: Required for all Spring Boot services
+- **Maven 3.6+**: For building the services
+- **PostgreSQL**: Database for all services
+- **Windows/Linux/Mac**: Operating system
 
-## Configuración de Base de Datos
+## Database Setup
 
-Crear la base de datos PostgreSQL:
+1. Install PostgreSQL and create a database named `dkarito`
+2. Run the database setup script:
+   ```sql
+   psql -U postgres -d dkarito -f scripts/db-setup.sql
+   ```
 
-```sql
-CREATE DATABASE dkarito;
--- Usuario: postgres, Contraseña: postgres
-```
+## Quick Start
 
-Cada microservicio creará automáticamente sus tablas con `ddl-auto: update`.
+### Option 1: Automated Setup (Windows)
 
-## Ejecución de Microservicios
+1. Ensure Java and Maven are installed
+2. Run the startup script:
+   ```batch
+   scripts\start-services.bat
+   ```
 
-Cada microservicio se ejecuta independientemente. El orden recomendado es:
+### Option 2: Manual Setup
 
-1. **auth-service** (puerto 8081)
-2. **product-service** (puerto 8082)
-3. **inventory-service** (puerto 8083)
-4. **order-service** (puerto 8084)
-5. **payment-service** (puerto 8085)
-6. **api-gateway** (puerto 8080)
+1. **Install Dependencies**:
+   - Download and install Java 17+ from [Adoptium](https://adoptium.net/)
+   - Download and install Maven from [maven.apache.org](https://maven.apache.org/download.cgi)
 
-### Comandos para ejecutar cada servicio:
+2. **Database Setup**:
+   - Install PostgreSQL
+   - Create database: `dkarito`
+   - Run `scripts/db-setup.sql`
 
-```bash
-# Navegar al directorio del servicio
-cd BackEnd/[service-name]
+3. **Start Services**:
+   ```bash
+   # Build all services
+   cd auth-service && mvn clean compile
+   cd ../product-service && mvn clean compile
+   cd ../inventory-service && mvn clean compile
+   cd ../order-service && mvn clean compile
+   cd ../payment-service && mvn clean compile
+   cd ../api-gateway && mvn clean compile
 
-# Ejecutar con Maven
-mvn spring-boot:run
-```
+   # Start services in separate terminals
+   cd auth-service && mvn spring-boot:run
+   cd product-service && mvn spring-boot:run
+   cd inventory-service && mvn spring-boot:run
+   cd order-service && mvn spring-boot:run
+   cd payment-service && mvn spring-boot:run
+   cd api-gateway && mvn spring-boot:run
+   ```
 
-### URLs de los servicios:
+## API Endpoints
+
+Once all services are running, access:
 
 - **API Gateway**: http://localhost:8080
-- **Auth Service**: http://localhost:8081 (directo) / http://localhost:8080/api/auth/** (via gateway)
-- **Product Service**: http://localhost:8082 (directo) / http://localhost:8080/api/products/** (via gateway)
-- **Inventory Service**: http://localhost:8083 (directo)
-- **Order Service**: http://localhost:8084 (directo) / http://localhost:8080/api/orders/** (via gateway)
-- **Payment Service**: http://localhost:8085 (directo) / http://localhost:8080/api/payments/** (via gateway)
+- **Swagger UI**: http://localhost:8080/swagger-ui.html
 
-## Documentación API
+### Authentication Endpoints
+- `POST /api/auth/register` - User registration
+- `POST /api/auth/login` - User login
+- `POST /api/auth/refresh` - Refresh JWT token
 
-Cada microservicio incluye documentación Swagger/OpenAPI:
+### Product Endpoints
+- `GET /api/products` - Get all products
+- `POST /api/products` - Create product (Admin)
+- `PUT /api/products/{id}` - Update product (Admin)
+- `DELETE /api/products/{id}` - Delete product (Admin)
 
-- Auth Service: http://localhost:8081/swagger-ui.html
-- Product Service: http://localhost:8082/swagger-ui.html
-- Order Service: http://localhost:8084/swagger-ui.html
-- Payment Service: http://localhost:8085/swagger-ui.html
-- API Gateway: http://localhost:8080/swagger-ui.html
+### Order Endpoints
+- `POST /api/orders` - Create order
+- `GET /api/orders` - Get user orders
+- `GET /api/orders/{id}` - Get order details
 
-## Endpoints Principales
+## Configuration
 
-### Auth Service
-- `POST /api/auth/register` - Registro de usuario
-- `POST /api/auth/login` - Login de usuario
-- `GET /api/auth/me` - Perfil del usuario autenticado
-- `POST /api/auth/refresh` - Refresh token
+Each service has its own `application.yml` with database and service configurations. Key settings:
 
-### Product Service
-- `GET /api/products` - Lista de productos (con paginación y filtros)
-- `GET /api/products/{id}` - Detalle de producto
-- `POST /api/products` - Crear producto (ADMIN)
-- `PUT /api/products/{id}` - Actualizar producto (ADMIN)
-- `DELETE /api/products/{id}` - Eliminar producto (ADMIN)
+- **Database**: PostgreSQL connection details
+- **JWT**: Secret key and expiration times
+- **Service Discovery**: Eureka client configuration
+- **API Gateway**: Routing rules
 
-### Order Service
-- `GET /api/orders/user/{userId}` - Órdenes del usuario
-- `POST /api/orders` - Crear nueva orden
-- `GET /api/orders/{id}` - Detalle de orden
-- `PUT /api/orders/{id}/status` - Actualizar estado de orden (ADMIN/RECEPTIONIST)
+## Development
 
-### Payment Service
-- `POST /api/payments/charge` - Procesar pago
-- `GET /api/payments/status/{orderId}` - Estado del pago
+### Adding New Features
 
-### Inventory Service
-- `GET /api/inventory/{productId}` - Stock de producto
-- `PUT /api/inventory/{productId}` - Actualizar stock (ADMIN)
+1. Choose the appropriate microservice
+2. Add entities, DTOs, repositories, services, and controllers
+3. Update API Gateway routes if needed
+4. Test the service independently
+5. Update database schema if required
 
-## Seguridad
+### Testing
 
-- **JWT Tokens**: Access token (15 min) y Refresh token (7 días)
-- **Roles**: ADMIN, USER, RECEPTIONIST
-- **Endpoints protegidos**: Solo auth-service tiene seguridad integrada
-- **CORS**: Configurado para permitir `http://localhost:3000`
+Each service includes unit and integration tests. Run tests with:
+```bash
+mvn test
+```
 
-## Desarrollo
+## Troubleshooting
 
-Para desarrollo local, ejecutar los servicios en el orden mencionado. El frontend React se conectará al API Gateway en `http://localhost:8080`.
+### Common Issues
 
-## Notas Importantes
+1. **Port Conflicts**: Ensure no other applications use ports 8080-8085
+2. **Database Connection**: Verify PostgreSQL is running and credentials are correct
+3. **Maven Build Failures**: Clear Maven cache with `mvn clean`
+4. **Service Discovery**: Check Eureka dashboard at http://localhost:8761
 
-- Los servicios se comunican entre sí vía HTTP (sin Eureka/Service Discovery por simplicidad)
-- El inventory-service se actualiza automáticamente cuando se crea una orden
-- Los pagos son simulados (no integran pasarelas reales)
-- Todas las tablas se crean automáticamente con JPA
+### Logs
+
+Check service logs in the terminal where each service is running. Logs include:
+- Startup information
+- Database connections
+- API requests/responses
+- Error details
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make changes and add tests
+4. Submit a pull request
+
+## License
+
+This project is licensed under the MIT License.

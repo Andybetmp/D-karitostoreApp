@@ -7,11 +7,9 @@ import {
   TableCell,
   TableHead,
   Typography,
-  TableContainer,
 } from '@mui/material';
 import { productTableRows } from 'data/product-data';
 import ProductItemRow from './ProductItemRow';
-import SimpleBar from 'simplebar-react';
 
 const TopProducts = (): ReactElement => {
   return (
@@ -19,7 +17,7 @@ const TopProducts = (): ReactElement => {
       <Typography variant="h4" color="common.white" mb={6}>
         Top Products
       </Typography>
-      <TableContainer component={SimpleBar}>
+      <div style={{ maxHeight: '400px', overflow: 'auto' }}>
         <Table sx={{ minWidth: 440 }}>
           <TableHead>
             <TableRow>
@@ -35,7 +33,7 @@ const TopProducts = (): ReactElement => {
             ))}
           </TableBody>
         </Table>
-      </TableContainer>
+      </div>
     </Paper>
   );
 };
