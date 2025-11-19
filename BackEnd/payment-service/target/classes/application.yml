@@ -18,6 +18,11 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
 
+jwt:
+  secret: dkarito-secret-key-for-jwt-tokens-very-secure-and-long-enough
+  expiration: 900000  # 15 minutes
+  refresh-expiration: 604800000  # 7 days
+
 logging:
   level:
     com.dkarito: DEBUG

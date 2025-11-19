@@ -13,47 +13,27 @@ spring:
             - Path=/api/auth/**
           filters:
             - StripPrefix=1
-
         - id: product-service
           uri: http://localhost:8082
           predicates:
             - Path=/api/products/**
           filters:
             - StripPrefix=1
-
+        - id: inventory-service
+          uri: http://localhost:8083
+          predicates:
+            - Path=/api/inventory/**
+          filters:
+            - StripPrefix=1
         - id: order-service
           uri: http://localhost:8084
           predicates:
             - Path=/api/orders/**
           filters:
             - StripPrefix=1
-
         - id: payment-service
           uri: http://localhost:8085
           predicates:
             - Path=/api/payments/**
           filters:
             - StripPrefix=1
-
-      globalcors:
-        cors-configurations:
-          '[/**]':
-            allowedOriginPatterns: ["http://localhost:3000"]
-            allowedMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
-            allowedHeaders: ["*"]
-            allowCredentials: true
-            maxAge: 3600
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health,info,gateway
-  endpoint:
-    health:
-      show-details: always
-
-logging:
-  level:
-    org.springframework.cloud.gateway: DEBUG
-    reactor.netty: INFO

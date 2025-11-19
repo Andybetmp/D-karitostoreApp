@@ -10,30 +10,29 @@
 -- Auth Service Tables
 CREATE TABLE IF NOT EXISTS users (
     id BIGSERIAL PRIMARY KEY,
-    username VARCHAR(50) UNIQUE NOT NULL,
-    email VARCHAR(100) UNIQUE NOT NULL,
-    password VARCHAR(255) NOT NULL,
-    first_name VARCHAR(50),
-    last_name VARCHAR(50),
-    phone VARCHAR(20),
-    address TEXT,
-    role VARCHAR(20) DEFAULT 'USER',
-    enabled BOOLEAN DEFAULT TRUE,
+    email VARCHAR(50) UNIQUE NOT NULL,
+    password VARCHAR(120) NOT NULL,
+    name VARCHAR(50) NOT NULL,
+    picture VARCHAR(255),
+    provider VARCHAR(20) DEFAULT 'EMAIL',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS user_roles (
+    user_id BIGINT NOT NULL,
+    roles VARCHAR(20) NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    PRIMARY KEY (user_id, roles)
 );
 
 -- Product Service Tables
 CREATE TABLE IF NOT EXISTS products (
     id BIGSERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
+    title VARCHAR(100) NOT NULL,
     description TEXT,
     price DECIMAL(10,2) NOT NULL,
-    category VARCHAR(100),
-    brand VARCHAR(100),
-    image_url VARCHAR(500),
-    stock_quantity INTEGER DEFAULT 0,
-    is_active BOOLEAN DEFAULT TRUE,
+    img VARCHAR(500),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -108,9 +107,6 @@ ON CONFLICT DO NOTHING;
 
 -- Create indexes for better performance
 CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
-CREATE INDEX IF NOT EXISTS idx_users_username ON users(username);
-CREATE INDEX IF NOT EXISTS idx_products_category ON products(category);
-CREATE INDEX IF NOT EXISTS idx_products_brand ON products(brand);
 CREATE INDEX IF NOT EXISTS idx_orders_user_id ON orders(user_id);
 CREATE INDEX IF NOT EXISTS idx_orders_status ON orders(status);
 CREATE INDEX IF NOT EXISTS idx_order_items_order_id ON order_items(order_id);
