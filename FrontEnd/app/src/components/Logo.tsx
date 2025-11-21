@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { rootPaths } from "../routes/paths";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 
@@ -75,7 +76,7 @@ const pathVariants = {
 const Logo = () => {
   return (
     <Container>
-      <Link to="/">
+      <Link to={rootPaths.homeRoot}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           enableBackground="new 0 0 24 24"

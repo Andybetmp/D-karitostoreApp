@@ -4,7 +4,8 @@ import styled from "styled-components";
 import Logo from "../assets/Svgs/star_white_48dp.svg";
 import { motion } from "framer-motion";
 import { useLocomotiveScroll } from "react-locomotive-scroll";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import { rootPaths } from "../routes/paths";
 
 const Section = styled.section`
   min-height: 100vh;
@@ -115,14 +116,31 @@ const Footer = () => {
   const { scroll } = useLocomotiveScroll();
   const navigate = useNavigate();
 
-  const handleScroll = (id) => {
-    let elem = document.querySelector(id);
+  const location = useLocation();
 
-    scroll.scrollTo(elem, {
-      offset: "-100",
-      duration: "2000",
-      easing: [0.25, 0.0, 0.35, 1.0],
-    });
+  const handleScroll = (id) => {
+    if (location.pathname !== rootPaths.homeRoot) {
+      navigate(rootPaths.homeRoot);
+      setTimeout(() => {
+        const elem = document.querySelector(id);
+        if (elem) {
+          scroll.scrollTo(elem, {
+            offset: "-100",
+            duration: "2000",
+            easing: [0.25, 0.0, 0.35, 1.0],
+          });
+        }
+      }, 1000);
+    } else {
+      let elem = document.querySelector(id);
+      if (elem) {
+        scroll.scrollTo(elem, {
+          offset: "-100",
+          duration: "2000",
+          easing: [0.25, 0.0, 0.35, 1.0],
+        });
+      }
+    }
   };
 
   const handleGestion = () => {
@@ -173,16 +191,16 @@ const Footer = () => {
             data-scroll-direction="horizontal"
           >
             &copy; {new Date().getFullYear()}. All Rights Reserved.
-             &nbsp; | &nbsp;Teléfono: 976976975 &nbsp; | &nbsp;WhatsApp: 976976975 &nbsp;
-          by <a href="mailto:ventas@dkarito.com.pe" target="_blank" rel="noreferrer">
+            &nbsp; | &nbsp;Teléfono: 976976975 &nbsp; | &nbsp;WhatsApp: 976976975 &nbsp;
+            by <a href="mailto:ventas@dkarito.com.pe" target="_blank" rel="noreferrer">
               D'Karito Store
             </a>
-             &nbsp; | &nbsp;  Ventas: &nbsp;
-              &nbsp;
+            &nbsp; | &nbsp;  Ventas: &nbsp;
+            &nbsp;
             <a href="mailto:ventas@dkarito.com.pe" target="_blank" rel="noreferrer">
               ventas@dkarito.com.pe
             </a>
-            
+
           </span>
           <span
             data-scroll

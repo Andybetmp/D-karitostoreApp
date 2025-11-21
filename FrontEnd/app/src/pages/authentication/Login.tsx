@@ -25,7 +25,7 @@ const Login = (): ReactElement => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const handleSubmit = () => {
-    navigate(rootPaths.homeRoot);
+    navigate(rootPaths.dashboard);
   };
 
   const handleClickShowPassword = () => {

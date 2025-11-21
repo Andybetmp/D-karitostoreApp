@@ -1,0 +1,6 @@
+com\dkarito\inventoryservice\dto\InventoryDto.class
+com\dkarito\inventoryservice\service\InventoryService.class
+com\dkarito\inventoryservice\domain\Inventory.class
+com\dkarito\inventoryservice\controller\InventoryController.class
+com\dkarito\inventoryservice\repository\InventoryRepository.class
+com\dkarito\inventoryservice\InventoryServiceApplication.class

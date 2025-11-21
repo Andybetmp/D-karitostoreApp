@@ -77,16 +77,24 @@ public class WebSecurityConfig {
             .csrf(AbstractHttpConfigurer::disable)
             .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            // ⚠️ TEMP: JWT DISABLED FOR TESTING - Uncomment below to re-enable authentication
+            .authorizeHttpRequests(auth -> auth
+                .anyRequest().permitAll()  // ⚠️ TEMP: Permite todas las peticiones sin autenticación
+            );
+            
+            /* ⚠️ ORIGINAL CODE - UNCOMMENT TO RE-ENABLE JWT:
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/auth/**", "/api/auth/**").permitAll()
                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                 .requestMatchers("/actuator/**").permitAll()
                 .anyRequest().authenticated()
             );
+            */
 
         http.authenticationProvider(authenticationProvider());
 
-        http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+        // ⚠️ TEMP: JWT filter disabled - Uncomment to re-enable
+        // http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

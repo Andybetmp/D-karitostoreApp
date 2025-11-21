@@ -12,8 +12,8 @@ const ScrollTriggerProxy = () => {
   gsap.registerPlugin(ScrollTrigger);
 
   useEffect(() => {
-    if (scroll) {
-      const element = scroll?.el; // locomotive scrolling element, in our case it's app (main)
+    if (scroll && scroll.el) {
+      const element = scroll.el; // locomotive scrolling element, in our case it's app (main)
 
       scroll.on("scroll", ScrollTrigger.update); // on scroll of locomotive, update scrolltrigger
 
@@ -38,8 +38,9 @@ const ScrollTriggerProxy = () => {
     }
 
     return () => {
-      ScrollTrigger.addEventListener("refresh", () => scroll?.update());
-      ScrollTrigger.refresh();
+      if (scroll) {
+        scroll.off("scroll", ScrollTrigger.update);
+      }
     };
   }, [scroll]);
 

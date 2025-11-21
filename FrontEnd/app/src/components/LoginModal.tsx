@@ -4,6 +4,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { GoogleLogin } from '@react-oauth/google';
 import { FaTimes, FaUser, FaLock, FaEnvelope } from 'react-icons/fa';
 import { useAuth } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
+import { rootPaths } from '../routes/paths';
 
 const Overlay = styled(motion.div)`
   position: fixed;
@@ -199,6 +201,7 @@ const ForgotPassword = styled.a`
 
 const LoginModal = () => {
   const { isLoginModalOpen, closeLoginModal, login, loginWithGoogle } = useAuth();
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('login');
   const [formData, setFormData] = useState({
     email: '',
@@ -223,10 +226,12 @@ const LoginModal = () => {
       provider: 'email'
     };
     login(userData);
+    navigate(rootPaths.dashboard);
   };
 
   const handleGoogleSuccess = (credentialResponse) => {
     loginWithGoogle(credentialResponse);
+    navigate(rootPaths.dashboard);
   };
 
   const handleGoogleError = () => {
@@ -255,14 +260,14 @@ const LoginModal = () => {
             <Title>{activeTab === 'login' ? 'Iniciar Sesión' : 'Registrarse'}</Title>
 
             <TabContainer>
-              <Tab 
-                active={activeTab === 'login'} 
+              <Tab
+                active={activeTab === 'login'}
                 onClick={() => setActiveTab('login')}
               >
                 Login
               </Tab>
-              <Tab 
-                active={activeTab === 'signup'} 
+              <Tab
+                active={activeTab === 'signup'}
                 onClick={() => setActiveTab('signup')}
               >
                 Sign Up

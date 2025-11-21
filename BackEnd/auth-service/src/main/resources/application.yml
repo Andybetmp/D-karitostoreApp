@@ -18,7 +18,7 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
   security:
-    enabled: true
+    enabled: false  # ⚠️ TEMP: Disabled for testing - Set to true to re-enable JWT
 
 jwt:
   secret: dkarito-secret-key-for-jwt-tokens-very-secure-and-long-enough

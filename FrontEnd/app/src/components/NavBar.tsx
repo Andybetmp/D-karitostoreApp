@@ -1,11 +1,13 @@
 import React, { useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import { useLocomotiveScroll } from "react-locomotive-scroll";
+import { rootPaths } from "../routes/paths";
 import LoginButton from "./LoginButton";
 import CartIcon from "./CartIcon";
 
-const NavContainer = styled(motion.div)<{ click: boolean }>`
+const NavContainer = styled(motion.div) <{ click: boolean }>`
   width: 100vw;
   z-index: 6;
   position: absolute;
@@ -95,14 +97,32 @@ const NavBar = () => {
 
   const { scroll } = useLocomotiveScroll();
 
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const handleScroll = (id) => {
-    let elem = document.querySelector(id);
-    setClick(!click);
-    scroll.scrollTo(elem, {
-      offset: "-100",
-      duration: "2000",
-      easing: [0.25, 0.0, 0.35, 1.0],
-    });
+    if (location.pathname !== rootPaths.homeRoot) {
+      setClick(!click);
+      navigate(rootPaths.homeRoot);
+      setTimeout(() => {
+        const elem = document.querySelector(id);
+        if (elem) {
+          scroll.scrollTo(elem, {
+            offset: "-100",
+            duration: "2000",
+            easing: [0.25, 0.0, 0.35, 1.0],
+          });
+        }
+      }, 1000); // Wait for page transition
+    } else {
+      let elem = document.querySelector(id);
+      setClick(!click);
+      scroll.scrollTo(elem, {
+        offset: "-100",
+        duration: "2000",
+        easing: [0.25, 0.0, 0.35, 1.0],
+      });
+    }
   };
 
   return (

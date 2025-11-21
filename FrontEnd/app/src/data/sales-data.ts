@@ -1,7 +1,7 @@
-import totalSales from 'assets/images/todays-sales/total-sales.png';
-import totalOrder from 'assets/images/todays-sales/total-order.png';
-import productSold from 'assets/images/todays-sales/product-sold.png';
-import newCustomer from 'assets/images/todays-sales/new-customer.png';
+import totalSales from 'assets/Images/todays-sales/total-sales.png';
+import totalOrder from 'assets/Images/todays-sales/total-order.png';
+import productSold from 'assets/Images/todays-sales/product-sold.png';
+import newCustomer from 'assets/Images/todays-sales/new-customer.png';
 
 export interface SaleItem {
   id?: number;

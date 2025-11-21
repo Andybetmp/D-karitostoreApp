@@ -24,6 +24,8 @@ import { AuthProvider } from "./context/AuthContext";
 import { CartProvider } from "./context/CartContext";
 import Login from "./pages/authentication/Login";
 import SignUp from "./pages/authentication/SignUp";
+import Dashboard from "./pages/dashboard/Dashboard";
+import { rootPaths } from "./routes/paths";
 
 
 function App() {
@@ -36,7 +38,7 @@ function App() {
       setLoaded(true);
     }, 3000);
   }, [])
-  
+
 
   return (
     <>
@@ -62,22 +64,21 @@ function App() {
                       {loaded ? null : <Loader />}
                     </AnimatePresence>
                     <ScrollTriggerProxy />
-                    <AnimatePresence>
-                      <main className='App' data-scroll-container ref={containerRef}>
-                        <Home />
-                        <About />
-                        <Shop />
-                        <Banner />
-                        <NewArrival />
-                        <Footer />
-                      </main>
-                    </AnimatePresence>
+                    <main className='App' data-scroll-container ref={containerRef}>
+                      <Home />
+                      <About />
+                      <Shop />
+                      <Banner />
+                      <NewArrival />
+                      <Footer />
+                    </main>
                     <LoginModal />
                   </LocomotiveScrollProvider>
                 } />
                 <Route path="/checkout" element={<CheckoutForm />} />
                 <Route path="/admin" element={<div>Admin Panel - Coming Soon</div>} />
                 <Route path="/login" element={<Login />} />
+                <Route path={rootPaths.dashboard} element={<Dashboard />} />
                 <Route path="/authentication/sign-up" element={<SignUp />} />
               </Routes>
             </ThemeProvider>

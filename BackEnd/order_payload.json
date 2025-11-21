@@ -1,0 +1,12 @@
+{
+    "userId": 27,
+    "shippingAddress": "Calle Verdadera 123, Quito",
+    "items": [
+        {
+            "productId": 6,
+            "productTitle": "Wireless Bluetooth Headphones",
+            "quantity": 1,
+            "price": 89.99
+        }
+    ]
+}

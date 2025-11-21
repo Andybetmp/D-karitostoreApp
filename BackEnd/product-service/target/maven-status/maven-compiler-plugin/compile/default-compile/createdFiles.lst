@@ -1,0 +1,6 @@
+com\dkarito\productservice\domain\Product.class
+com\dkarito\productservice\dto\ProductDto.class
+com\dkarito\productservice\service\ProductService.class
+com\dkarito\productservice\controller\ProductController.class
+com\dkarito\productservice\ProductServiceApplication.class
+com\dkarito\productservice\repository\ProductRepository.class

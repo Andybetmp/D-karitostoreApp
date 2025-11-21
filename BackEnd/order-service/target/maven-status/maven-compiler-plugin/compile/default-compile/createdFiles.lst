@@ -1,0 +1,11 @@
+com\dkarito\orderservice\dto\CreateOrderRequest.class
+com\dkarito\orderservice\service\OrderService.class
+com\dkarito\orderservice\dto\OrderItemRequest.class
+com\dkarito\orderservice\repository\OrderRepository.class
+com\dkarito\orderservice\dto\OrderItemDto.class
+com\dkarito\orderservice\controller\OrderController.class
+com\dkarito\orderservice\domain\Order.class
+com\dkarito\orderservice\dto\OrderDto.class
+com\dkarito\orderservice\domain\OrderItem.class
+com\dkarito\orderservice\domain\Order$OrderStatus.class
+com\dkarito\orderservice\OrderServiceApplication.class
