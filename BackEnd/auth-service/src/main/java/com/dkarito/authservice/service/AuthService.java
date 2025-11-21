@@ -34,26 +34,34 @@ public class AuthService {
 
     @Transactional
     public AuthResponse registerUser(RegisterRequest registerRequest) {
-        if (userRepository.existsByEmail(registerRequest.getEmail())) {
-            throw new RuntimeException("Error: Email is already in use!");
+        try {
+            if (userRepository.existsByEmail(registerRequest.getEmail())) {
+                throw new RuntimeException("Error: Email is already in use!");
+            }
+
+            // Create new user's account
+            User user = new User(registerRequest.getEmail(),
+                    encoder.encode(registerRequest.getPassword()),
+                    registerRequest.getName());
+
+            user.setUsername(registerRequest.getEmail()); // Explicitly set username to email
+
+            userRepository.save(user);
+
+            // Auto login after registration
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(registerRequest.getEmail(), registerRequest.getPassword()));
+
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            String jwt = jwtUtils.generateJwtToken(authentication);
+            String refreshToken = jwtUtils.generateRefreshToken(authentication);
+
+            return new AuthResponse(jwt, refreshToken, user);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("REGISTRATION ERROR: " + e.getMessage() + " | CAUSE: "
+                    + (e.getCause() != null ? e.getCause().getMessage() : "null"));
         }
-
-        // Create new user's account
-        User user = new User(registerRequest.getEmail(),
-                           encoder.encode(registerRequest.getPassword()),
-                           registerRequest.getName());
-
-        userRepository.save(user);
-
-        // Auto login after registration
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(registerRequest.getEmail(), registerRequest.getPassword()));
-
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtUtils.generateJwtToken(authentication);
-        String refreshToken = jwtUtils.generateRefreshToken(authentication);
-
-        return new AuthResponse(jwt, refreshToken, user);
     }
 
     public AuthResponse authenticateUser(AuthRequest loginRequest) {

@@ -3,6 +3,7 @@ interface UserMenuItem {
   title: string;
   icon: string;
   color?: string;
+  path?: string;
 }
 
 const userMenuItems: UserMenuItem[] = [
@@ -11,12 +12,14 @@ const userMenuItems: UserMenuItem[] = [
     title: 'View Profile',
     icon: 'mingcute:user-2-fill',
     color: 'text.primary',
+    path: '/profile',
   },
   {
     id: 2,
     title: 'Account Settings',
     icon: 'material-symbols:settings-account-box-rounded',
     color: 'text.primary',
+    path: '/settings',
   },
   {
     id: 3,
@@ -41,6 +44,7 @@ const userMenuItems: UserMenuItem[] = [
     title: 'Logout',
     icon: 'material-symbols:logout',
     color: 'error.main',
+    path: '/',
   },
 ];
 

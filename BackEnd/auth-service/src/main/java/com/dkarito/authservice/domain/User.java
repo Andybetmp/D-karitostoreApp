@@ -8,10 +8,9 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
-
 @Entity
 @Table(name = "users", uniqueConstraints = {
-    @UniqueConstraint(columnNames = "email")
+        @UniqueConstraint(columnNames = "email")
 })
 public class User {
 
@@ -23,6 +22,10 @@ public class User {
     @Size(max = 50)
     @Email
     private String email;
+
+    @NotBlank
+    @Size(max = 20)
+    private String username;
 
     @NotBlank
     @Size(max = 120)
@@ -63,10 +66,12 @@ public class User {
         updatedAt = LocalDateTime.now();
     }
 
-    public User() {}
+    public User() {
+    }
 
     public User(String email, String password, String name) {
         this.email = email;
+        this.username = email; // Set username to email by default
         this.password = password;
         this.name = name;
     }
@@ -86,6 +91,14 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {

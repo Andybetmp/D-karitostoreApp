@@ -18,14 +18,42 @@ import { useState, ReactElement } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { rootPaths } from '../../routes/paths';
 import Image from '../../components/base/Image';
+import { useAuth } from '../../context/AuthContext';
 const logoWithText = '/Logo-with-text.png';
 
 const Login = (): ReactElement => {
   const navigate = useNavigate();
+  const { login, isLoading, error, clearError } = useAuth();
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [formData, setFormData] = useState({
+    email: '',
+    password: ''
+  });
+  const [localError, setLocalError] = useState<string | null>(null);
 
-  const handleSubmit = () => {
-    navigate(rootPaths.dashboard);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+    if (localError) setLocalError(null);
+    if (error) clearError();
+  };
+
+  const handleSubmit = async () => {
+    try {
+      setLocalError(null);
+      await login({
+        email: formData.email,
+        password: formData.password
+      });
+      navigate(rootPaths.dashboard);
+    } catch (err: any) {
+      console.error('Login failed:', err);
+      // Intentar obtener el mensaje de error específico del backend
+      const backendError = err.response?.data?.message || err.message || 'Error de conexión';
+      setLocalError(`Error: ${backendError}`);
+    }
   };
 
   const handleClickShowPassword = () => {
@@ -55,10 +83,20 @@ const Login = (): ReactElement => {
               Sign up
             </Link>
           </Typography>
+
+          {(error || localError) && (
+            <Typography color="error" textAlign="center">
+              {localError || error}
+            </Typography>
+          )}
+
           <TextField
             variant="filled"
             label="Email"
             type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
             sx={{
               '.MuiFilledInput-root': {
                 bgcolor: 'grey.A100',
@@ -78,6 +116,9 @@ const Login = (): ReactElement => {
           <TextField
             variant="filled"
             label="Password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
             type={showPassword ? 'text' : 'password'}
             sx={{
               '.MuiFilledInput-root': {
@@ -127,11 +168,12 @@ const Login = (): ReactElement => {
           </FormGroup>
           <Button
             onClick={handleSubmit}
+            disabled={isLoading}
             sx={{
               fontWeight: 'fontWeightRegular',
             }}
           >
-            Log In
+            {isLoading ? 'Logging in...' : 'Log In'}
           </Button>
           <Divider />
           <Typography textAlign="center" color="text.secondary" variant="body1">

@@ -6,17 +6,9 @@ import { useRef } from "react";
 
 import { motion } from "framer-motion";
 import { useCart } from "../context/CartContext";
+import { productService, Product as ProductType } from "../services/productService";
+import { useState, useEffect } from "react";
 
-import img1 from "../assets/Images/1.webp";
-import img2 from "../assets/Images/2.webp";
-import img3 from "../assets/Images/3.webp";
-import img4 from "../assets/Images/4.webp";
-import img5 from "../assets/Images/5.webp";
-import img6 from "../assets/Images/6.webp";
-import img7 from "../assets/Images/7.webp";
-import img8 from "../assets/Images/8.webp";
-import img9 from "../assets/Images/9.webp";
-import img10 from "../assets/Images/10.webp";
 
 const Section = styled.section`
   min-height: 100vh;
@@ -129,6 +121,13 @@ const Item = styled(motion.div)`
     cursor: pointer;
   }
 
+  .price {
+    font-size: ${props => props.theme.fontlg};
+    font-weight: 600;
+    color: ${props => props.theme.text};
+    margin-top: 0.5rem;
+  }
+
   @media (max-width: 48em) {
     width: 15rem;
   }
@@ -151,7 +150,7 @@ const AddToCartButton = styled.button`
   }
 `;
 
-const Product = ({ img, title = "", id, price }) => {
+const Product = ({ img, title = "", id, price }: { img: string; title: string; id: string; price: number }) => {
   const { addToCart } = useCart();
 
   const handleAddToCart = () => {
@@ -167,6 +166,7 @@ const Product = ({ img, title = "", id, price }) => {
     >
       <img src={img} alt={title} />
       <h1>{title}</h1>
+      <div className="price">${price}</div>
       <AddToCartButton onClick={handleAddToCart}>
         Agregar al carrito
       </AddToCartButton>
@@ -179,6 +179,25 @@ const Shop = () => {
 
   const ref = useRef(null);
   const horizontalRef = useRef(null);
+  const [products, setProducts] = useState<ProductType[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch products from backend
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await productService.getAllProducts();
+        setProducts(response.data);
+      } catch (error) {
+        console.error('Error loading products:', error);
+        // Si falla, usar productos de ejemplo
+        setProducts([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProducts();
+  }, []);
 
   useLayoutEffect(() => {
     let element = ref.current;
@@ -236,29 +255,34 @@ const Shop = () => {
       </Title>
       <Left>
         <p>
-          Cada pieza de nuestra colección es el resultado de un cuidadoso 
-          proceso artesanal, donde la calidad del cuero peruano se combina 
-          con diseños modernos y funcionales. Desde elegantes correas y 
-          billeteras hasta accesorios únicos, cada producto refleja nuestra 
+          Cada pieza de nuestra colección es el resultado de un cuidadoso
+          proceso artesanal, donde la calidad del cuero peruano se combina
+          con diseños modernos y funcionales. Desde elegantes correas y
+          billeteras hasta accesorios únicos, cada producto refleja nuestra
           pasión por el detalle y el compromiso con la excelencia.
           <br />
           <br />
-          Explora nuestra tienda y descubre artículos pensados para quienes 
-          valoran la autenticidad, el diseño y la durabilidad. En D’Karito, 
+          Explora nuestra tienda y descubre artículos pensados para quienes
+          valoran la autenticidad, el diseño y la durabilidad. En D’Karito,
           cada accesorio cuenta una historia hecha a mano, pensada para durar contigo.
         </p>
       </Left>
       <Right ref={horizontalRef}>
-        <Product id="1" img={img1} title="Man Basics" price={50} />
-        <Product id="2" img={img2} title="Tops" price={40} />
-        <Product id="3" img={img3} title="Sweatshirts" price={60} />
-        <Product id="4" img={img4} title="Ethnic Wear" price={70} />
-        <Product id="5" img={img5} title="Blazers" price={80} />
-        <Product id="6" img={img6} title="Suits" price={100} />
-        <Product id="7" img={img7} title="Antiques" price={90} />
-        <Product id="8" img={img8} title="Jewellery" price={30} />
-        <Product id="9" img={img9} title="Watches" price={120} />
-        <Product id="10" img={img10} title="Special Edition" price={150} />
+        {loading ? (
+          <h1>Cargando productos...</h1>
+        ) : products.length === 0 ? (
+          <h1>No hay productos disponibles</h1>
+        ) : (
+          products.map((product) => (
+            <Product
+              key={product.id}
+              id={product.id!}
+              img={product.imageUrl}
+              title={product.name}
+              price={product.price}
+            />
+          ))
+        )}
       </Right>
     </Section>
   );

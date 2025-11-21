@@ -25,45 +25,61 @@ public class AuthController {
 
     @PostMapping("/register")
     @Operation(summary = "Register a new user")
-    public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest registerRequest) {
+    public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest registerRequest) {
         try {
             AuthResponse authResponse = authService.registerUser(registerRequest);
             return ResponseEntity.ok(authResponse);
         } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
         }
     }
 
     @PostMapping("/login")
     @Operation(summary = "Authenticate user and get tokens")
-    public ResponseEntity<AuthResponse> authenticate(@Valid @RequestBody AuthRequest loginRequest) {
+    public ResponseEntity<?> authenticate(@Valid @RequestBody AuthRequest loginRequest) {
         try {
             AuthResponse authResponse = authService.authenticateUser(loginRequest);
             return ResponseEntity.ok(authResponse);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
         }
     }
 
     @PostMapping("/refresh")
     @Operation(summary = "Refresh access token using refresh token")
-    public ResponseEntity<AuthResponse> refreshToken(@Valid @RequestBody RefreshTokenRequest refreshTokenRequest) {
+    public ResponseEntity<?> refreshToken(@Valid @RequestBody RefreshTokenRequest refreshTokenRequest) {
         try {
             AuthResponse authResponse = authService.refreshToken(refreshTokenRequest.getRefreshToken());
             return ResponseEntity.ok(authResponse);
         } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
         }
     }
 
     @GetMapping("/me")
     @Operation(summary = "Get current user profile")
-    public ResponseEntity<UserProfile> getCurrentUser() {
+    public ResponseEntity<?> getCurrentUser() {
         try {
             UserProfile userProfile = authService.getCurrentUserProfile();
             return ResponseEntity.ok(userProfile);
         } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(new MessageResponse(e.getMessage()));
         }
+    }
+}
+
+class MessageResponse {
+    private String message;
+
+    public MessageResponse(String message) {
+        this.message = message;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

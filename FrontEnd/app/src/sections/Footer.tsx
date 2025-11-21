@@ -144,7 +144,7 @@ const Footer = () => {
   };
 
   const handleGestion = () => {
-    navigate('/admin');
+    navigate('/login');
   };
 
   const handleDeveloper = () => {
@@ -172,7 +172,7 @@ const Footer = () => {
           <li onClick={() => handleScroll(".about")}>Sobre nosotros</li>
           <li onClick={() => handleScroll("#shop")}>Tienda</li>
           <li onClick={() => handleScroll("#new-arrival")}>Recien llegados</li>
-          <li onClick={handleGestion}>Gestión</li>
+          <li onClick={() => navigate('/login')}>Gestión</li>
           <li>
             <a href="https://google.com" target="_blank" rel="noreferrer">
               Instagram

@@ -141,50 +141,65 @@ const NewArrival = () => {
     let element = ref.current;
     let scrollingElement = ScrollingRef.current;
 
+    // Safety check
+    if (!element || !scrollingElement) {
+      console.warn('NewArrival: Elements not ready');
+      return;
+    }
+
     let t1 = gsap.timeline();
 
-    setTimeout(() => {
-      t1.to(element, {
-        scrollTrigger: {
-          trigger: element,
-          start: "top top",
-          end: "bottom+=100% top-=100%",
-          scroller: ".App", // locomotive element
-          scrub: true,
-          pin: true,
-          //   markers:true,
-        },
-        // we have to increase scrolling height of this section same as the scrolling element width
-        ease: "none,",
-      });
+    // Increased timeout to ensure locomotive-scroll is fully initialized
+    const timer = setTimeout(() => {
+      try {
+        // Verify elements still exist
+        if (!element || !scrollingElement) return;
 
-      // Verticle Scrolling
-      t1.fromTo(
-        scrollingElement,
-        {
-          y: "0",
-        },
-
-        {
-          y: "-100%",
+        t1.to(element, {
           scrollTrigger: {
-            trigger: scrollingElement,
+            trigger: element,
             start: "top top",
-            end: "bottom top",
+            end: "bottom+=100% top-=100%",
             scroller: ".App", // locomotive element
             scrub: true,
-
+            pin: true,
             //   markers:true,
           },
           // we have to increase scrolling height of this section same as the scrolling element width
-        }
-      );
-      ScrollTrigger.refresh();
-    }, 1000);
+          ease: "none,",
+        });
+
+        // Verticle Scrolling
+        t1.fromTo(
+          scrollingElement,
+          {
+            y: "0",
+          },
+
+          {
+            y: "-100%",
+            scrollTrigger: {
+              trigger: scrollingElement,
+              start: "top top",
+              end: "bottom top",
+              scroller: ".App", // locomotive element
+              scrub: true,
+
+              //   markers:true,
+            },
+            // we have to increase scrolling height of this section same as the scrolling element width
+          }
+        );
+        ScrollTrigger.refresh();
+      } catch (error) {
+        console.warn('NewArrival GSAP error:', error);
+      }
+    }, 1500); // Increased from 1000ms to 1500ms
 
     return () => {
+      clearTimeout(timer);
       // Let's clear instances
-      t1.kill();
+      if (t1) t1.kill();
       ScrollTrigger.getAll().forEach(trigger => trigger.kill());
     };
   }, []);
@@ -208,14 +223,14 @@ const NewArrival = () => {
       </Container>
 
       <Text data-scroll data-scroll-speed="-4">
-        Cada pieza de nuestra colección es el resultado de un cuidadoso proceso 
-        artesanal, donde la calidad del cuero peruano se combina con diseños 
-        modernos y funcionales. Desde elegantes correas y billeteras hasta 
-        accesorios únicos, cada producto refleja nuestra pasión por el detalle 
+        Cada pieza de nuestra colección es el resultado de un cuidadoso proceso
+        artesanal, donde la calidad del cuero peruano se combina con diseños
+        modernos y funcionales. Desde elegantes correas y billeteras hasta
+        accesorios únicos, cada producto refleja nuestra pasión por el detalle
         y el compromiso con la excelencia.
         <br />
         <br />
-        Explora nuestra tienda y descubre artículos pensados para quienes 
+        Explora nuestra tienda y descubre artículos pensados para quienes
         valoran la autenticidad, el diseño y la durabilidad. En D’Karito, cada accesorio cuenta una historia hecha a mano, pensada para durar contigo.
         <br />
         <br />

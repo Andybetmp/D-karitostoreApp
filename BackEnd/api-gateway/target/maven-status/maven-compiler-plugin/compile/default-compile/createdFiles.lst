@@ -1,1 +1,2 @@
 com\dkarito\apigateway\ApiGatewayApplication.class
+com\dkarito\apigateway\config\CorsConfig.class

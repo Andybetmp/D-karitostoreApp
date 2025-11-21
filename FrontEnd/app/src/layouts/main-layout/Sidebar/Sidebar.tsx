@@ -4,8 +4,8 @@ import navItems from 'data/nav-items';
 import NavItem from './NavItem';
 import { drawerCloseWidth, drawerOpenWidth } from '..';
 import Image from 'components/base/Image';
-import logoWithText from '/Logo-with-text.png';
-import logo from '/LOGO.png';
+import logoWithText from 'assets/Logo-with-text.png';
+import logo from 'assets/LOGO.png';
 import { rootPaths } from 'routes/paths';
 
 const Sidebar = ({ open }: { open: boolean }): ReactElement => {

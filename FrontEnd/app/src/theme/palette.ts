@@ -2,6 +2,7 @@ import { PaletteOptions } from '@mui/material';
 import { teal, grey, green, stone, fuchsia, bluishCyan, pinkishRed, yellowOrange } from './colors';
 
 const palette: PaletteOptions = {
+  mode: 'dark',
   primary: {
     light: teal[50],
     main: teal[100],

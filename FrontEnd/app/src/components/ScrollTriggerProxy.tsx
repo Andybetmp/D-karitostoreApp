@@ -5,42 +5,69 @@ import { useEffect } from "react";
 import { useLocomotiveScroll } from "react-locomotive-scroll";
 
 const ScrollTriggerProxy = () => {
-  // first let's get instance of locomotive scroll
-
   const { scroll } = useLocomotiveScroll();
-  // Register scroll trigger plugin
+
   gsap.registerPlugin(ScrollTrigger);
 
   useEffect(() => {
-    if (scroll && scroll.el) {
-      const element = scroll.el; // locomotive scrolling element, in our case it's app (main)
+    if (!scroll || !scroll.el) return;
 
-      scroll.on("scroll", ScrollTrigger.update); // on scroll of locomotive, update scrolltrigger
+    const element = scroll.el;
 
-      //  let's use scroller proxy
-      ScrollTrigger.scrollerProxy(element, {
-        scrollTop(value) {
-          return arguments.length
-            ? scroll.scrollTo(value, 0, 0)
-            : scroll.scroll.instance.scroll.y;
-        }, // we don't have to define a scrollLeft because we're only scrolling vertically.
-        getBoundingClientRect() {
-          return {
-            top: 0,
-            left: 0,
-            width: window.innerWidth,
-            height: window.innerHeight,
-          };
-        },
-        // LocomotiveScroll handles things completely differently on mobile devices - it doesn't even transform the container at all! So to get the correct behavior and avoid jitters, we should pin things with position: fixed on mobile. We sense it by checking to see if there's a transform applied to the container (the LocomotiveScroll-controlled element).
-        pinType: element.style.transform ? "transform" : "fixed",
-      });
-    }
+    // Wait for locomotive scroll to be fully initialized
+    const initProxy = () => {
+      try {
+        // Ensure all data-scroll elements have valid speed attributes
+        const scrollElements = element.querySelectorAll('[data-scroll]');
+        scrollElements.forEach((el) => {
+          if (!el.hasAttribute('data-scroll-speed')) {
+            el.setAttribute('data-scroll-speed', '0');
+          }
+          const speed = el.getAttribute('data-scroll-speed');
+          if (!speed || speed === 'undefined' || speed === 'null') {
+            el.setAttribute('data-scroll-speed', '0');
+          }
+        });
+
+        // Update locomotive scroll
+        scroll.update();
+
+        // Setup ScrollTrigger proxy
+        scroll.on("scroll", ScrollTrigger.update);
+
+        ScrollTrigger.scrollerProxy(element, {
+          scrollTop(value) {
+            return arguments.length
+              ? scroll.scrollTo(value, 0, 0)
+              : scroll.scroll.instance.scroll.y;
+          },
+          getBoundingClientRect() {
+            return {
+              top: 0,
+              left: 0,
+              width: window.innerWidth,
+              height: window.innerHeight,
+            };
+          },
+          pinType: element.style.transform ? "transform" : "fixed",
+        });
+
+        // Refresh ScrollTrigger after setup
+        ScrollTrigger.refresh();
+      } catch (error) {
+        console.warn('ScrollTrigger proxy setup error:', error);
+      }
+    };
+
+    // Delay initialization to ensure DOM is ready
+    const timer = setTimeout(initProxy, 500);
 
     return () => {
+      clearTimeout(timer);
       if (scroll) {
         scroll.off("scroll", ScrollTrigger.update);
       }
+      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
     };
   }, [scroll]);
 

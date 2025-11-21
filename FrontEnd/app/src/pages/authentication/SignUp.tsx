@@ -10,12 +10,12 @@ import {
   Typography,
   InputAdornment,
 } from '@mui/material';
-import IconifyIcon from '../../components/base/IconifyIcon';
+import IconifyIcon from 'components/base/IconifyIcon';
 import { useState, ReactElement } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { rootPaths } from '../../routes/paths';
-import Image from '../../components/base/Image';
-const logoWithText = '/Logo-with-text.png';
+import { rootPaths } from 'routes/paths';
+import Image from 'components/base/Image';
+import logoWithText from 'assets/Logo-with-text.png';
 
 const SignUp = (): ReactElement => {
   const navigate = useNavigate();
@@ -23,7 +23,7 @@ const SignUp = (): ReactElement => {
   const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
 
   const handleSubmit = () => {
-    navigate(rootPaths.homeRoot);
+    navigate(rootPaths.dashboard);
   };
 
   const handleShowPassword = () => {
@@ -52,7 +52,7 @@ const SignUp = (): ReactElement => {
           </Typography>
           <Typography variant="h6" fontWeight={500} textAlign="center" color="text.primary">
             Have an account?{' '}
-            <Link href="/authentication/login" underline="none">
+            <Link href={rootPaths.login} underline="none">
               Log In
             </Link>
           </Typography>

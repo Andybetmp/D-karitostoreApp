@@ -5,7 +5,6 @@ import { GoogleLogin } from '@react-oauth/google';
 import { FaTimes, FaUser, FaLock, FaEnvelope } from 'react-icons/fa';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { rootPaths } from '../routes/paths';
 
 const Overlay = styled(motion.div)`
   position: fixed;
@@ -113,13 +112,18 @@ const Button = styled.button`
   cursor: pointer;
   transition: all 0.3s ease;
 
-  &:hover {
+  &:hover:not(:disabled) {
     transform: scale(1.02);
     box-shadow: 0 5px 15px rgba(255, 255, 255, 0.3);
   }
 
-  &:active {
+  &:active:not(:disabled) {
     transform: scale(0.98);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
   }
 `;
 
@@ -199,8 +203,19 @@ const ForgotPassword = styled.a`
   }
 `;
 
+const ErrorMessage = styled.div`
+  background-color: rgba(255, 0, 0, 0.1);
+  border: 1px solid rgba(255, 0, 0, 0.3);
+  border-radius: 8px;
+  padding: 0.75rem;
+  color: #ff6b6b;
+  font-size: ${props => props.theme.fontsm};
+  margin-bottom: 1rem;
+  text-align: center;
+`;
+
 const LoginModal = () => {
-  const { isLoginModalOpen, closeLoginModal, login, loginWithGoogle } = useAuth();
+  const { isLoginModalOpen, closeLoginModal, login, register, loginWithGoogle, isLoading, error, clearError } = useAuth();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('login');
   const [formData, setFormData] = useState({
@@ -209,33 +224,65 @@ const LoginModal = () => {
     name: ''
   });
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
     });
+    // Limpiar error al escribir
+    if (error) clearError();
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Aquí se enviará la información al backend
-    const userData = {
-      email: formData.email,
-      name: activeTab === 'signup' ? formData.name : formData.email.split('@')[0],
-      picture: null,
-      provider: 'email'
-    };
-    login(userData);
-    navigate(rootPaths.dashboard);
+
+    try {
+      let authResponse;
+      if (activeTab === 'login') {
+        // Login
+        authResponse = await login({
+          email: formData.email,
+          password: formData.password
+        });
+      } else {
+        // Register
+        authResponse = await register({
+          name: formData.name,
+          email: formData.email,
+          password: formData.password
+        });
+      }
+
+      // Redirigir a la página principal tras éxito (según solicitud del usuario)
+      navigate('/');
+
+      // Cerrar modal
+      closeLoginModal();
+
+      // Limpiar formulario
+      setFormData({
+        email: '',
+        password: '',
+        name: ''
+      });
+    } catch (err) {
+      // El error ya está manejado en AuthContext
+      console.error('Authentication error:', err);
+    }
   };
 
-  const handleGoogleSuccess = (credentialResponse) => {
+  const handleGoogleSuccess = (credentialResponse: any) => {
     loginWithGoogle(credentialResponse);
-    navigate(rootPaths.dashboard);
+    navigate('/');
   };
 
   const handleGoogleError = () => {
     console.log('Google Login Failed');
+  };
+
+  const handleTabChange = (tab: string) => {
+    setActiveTab(tab);
+    clearError();
   };
 
   return (
@@ -262,17 +309,23 @@ const LoginModal = () => {
             <TabContainer>
               <Tab
                 active={activeTab === 'login'}
-                onClick={() => setActiveTab('login')}
+                onClick={() => handleTabChange('login')}
               >
                 Login
               </Tab>
               <Tab
                 active={activeTab === 'signup'}
-                onClick={() => setActiveTab('signup')}
+                onClick={() => handleTabChange('signup')}
               >
                 Sign Up
               </Tab>
             </TabContainer>
+
+            {error && (
+              <ErrorMessage>
+                {error}
+              </ErrorMessage>
+            )}
 
             <Form onSubmit={handleSubmit}>
               {activeTab === 'signup' && (
@@ -287,6 +340,7 @@ const LoginModal = () => {
                     value={formData.name}
                     onChange={handleChange}
                     required
+                    disabled={isLoading}
                   />
                 </InputGroup>
               )}
@@ -302,6 +356,7 @@ const LoginModal = () => {
                   value={formData.email}
                   onChange={handleChange}
                   required
+                  disabled={isLoading}
                 />
               </InputGroup>
 
@@ -316,6 +371,7 @@ const LoginModal = () => {
                   value={formData.password}
                   onChange={handleChange}
                   required
+                  disabled={isLoading}
                 />
               </InputGroup>
 
@@ -323,8 +379,11 @@ const LoginModal = () => {
                 <ForgotPassword href="#">¿Olvidaste tu contraseña?</ForgotPassword>
               )}
 
-              <Button type="submit">
-                {activeTab === 'login' ? 'Iniciar Sesión' : 'Crear Cuenta'}
+              <Button type="submit" disabled={isLoading}>
+                {isLoading
+                  ? 'Procesando...'
+                  : activeTab === 'login' ? 'Iniciar Sesión' : 'Crear Cuenta'
+                }
               </Button>
             </Form>
 

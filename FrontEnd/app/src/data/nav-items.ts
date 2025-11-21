@@ -37,7 +37,7 @@ const navItems: NavItem[] = [
   },
   {
     id: 5,
-    path: '#!',
+    path: '/dashboard/products',
     title: 'Product',
     icon: 'lets-icons:bag-alt-light',
     active: false,

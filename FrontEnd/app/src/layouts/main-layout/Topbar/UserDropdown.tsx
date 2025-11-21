@@ -1,10 +1,12 @@
 import { Menu, Avatar, Button, Tooltip, MenuItem, ListItemIcon, ListItemText } from '@mui/material';
 import IconifyIcon from 'components/base/IconifyIcon';
-import profile from 'assets/images/account/Profile.png';
+import profile from 'assets/Images/account/Profile.png';
 import { useState, MouseEvent, useCallback, ReactElement } from 'react';
+import { useNavigate } from 'react-router-dom';
 import userMenuItems from 'data/usermenu-items';
 
 const UserDropdown = (): ReactElement => {
+  const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const menuOpen = Boolean(anchorEl);
 
@@ -15,6 +17,13 @@ const UserDropdown = (): ReactElement => {
   const handleUserClose = useCallback(() => {
     setAnchorEl(null);
   }, []);
+
+  const handleMenuItemClick = useCallback((path?: string) => {
+    handleUserClose();
+    if (path) {
+      navigate(path);
+    }
+  }, [navigate]);
 
   return (
     <>
@@ -66,7 +75,7 @@ const UserDropdown = (): ReactElement => {
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
         {userMenuItems.map((userMenuItem) => (
-          <MenuItem key={userMenuItem.id} onClick={handleUserClose}>
+          <MenuItem key={userMenuItem.id} onClick={() => handleMenuItemClick(userMenuItem.path)}>
             <ListItemIcon
               sx={{
                 minWidth: `0 !important`,
