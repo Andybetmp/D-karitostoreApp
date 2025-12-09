@@ -1,0 +1,399 @@
+{
+  "info": {
+    "_postman_id": "e09237bf-c5fc-42ce-a2d1-c3288fc2c97a",
+    "name": "SOA Ticketing - E2E Tests",
+    "description": "Colección completa de pruebas end-to-end para el sistema SOA Ticketing.\n\nFlujo:\n1. Registro de usuario\n2. Login (obtiene JWT)\n3. Crear evento\n4. Comprar ticket\n5. Consultar mis tickets",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "39132705"
+  },
+  "item": [
+    {
+      "name": "1. Registro de Usuario",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Usuario registrado correctamente\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.success).to.be.true;",
+              "    pm.expect(jsonData.token).to.not.be.empty;",
+              "    pm.expect(jsonData.usuario.email).to.eql(\"u20202269@utp.edu.pe\");",
+              "    ",
+              "    // Guardar token para siguientes requests",
+              "    pm.environment.set(\"jwt_token\", jsonData.token);",
+              "    pm.environment.set(\"user_email\", jsonData.usuario.email);",
+              "});"
+            ],
+            "type": "text/javascript",
+            "id": "d79e510a-b23b-46d2-b6b0-23ca0f0c3104"
+          }
+        }
+      ],
+      "id": "df56901b-37d6-414b-aa75-61f350cbf4a1",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"nombre\": \"Freddy\",\n    \"apellido\": \"Ticona\",\n    \"email\": \"u20202269@utp.edu.pe\",\n    \"contrasena\": \"pass123456\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/orchestration/register",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "orchestration",
+            "register"
+          ]
+        },
+        "description": "Registra un nuevo usuario en el sistema y obtiene un JWT token."
+      },
+      "response": []
+    },
+    {
+      "name": "2. Login",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Login exitoso\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.success).to.be.true;",
+              "    pm.expect(jsonData.token).to.not.be.empty;",
+              "    ",
+              "    // Actualizar token",
+              "    pm.environment.set(\"jwt_token\", jsonData.token);",
+              "});"
+            ],
+            "type": "text/javascript",
+            "id": "e6bb5fb1-e62b-4107-b921-74c7f6388203"
+          }
+        }
+      ],
+      "id": "8c9733a7-9da9-4620-87bc-baef18f86497",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"email\": \"u20202269@utp.edu.pe\",\n    \"contrasena\": \"pass123456\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/users/login",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "users",
+            "login"
+          ]
+        },
+        "description": "Autentica un usuario existente y obtiene un nuevo JWT token."
+      },
+      "response": []
+    },
+    {
+      "name": "3. Crear Evento",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Evento creado correctamente\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.nombre).to.eql(\"Rock Fest 2026\");",
+              "    pm.expect(jsonData.id).to.not.be.undefined;",
+              "    pm.expect(jsonData.tiposEntrada).to.be.an('array');",
+              "    pm.expect(jsonData.tiposEntrada.length).to.be.at.least(1);",
+              "    ",
+              "    // Guardar IDs para siguiente request",
+              "    pm.environment.set(\"event_id\", jsonData.id);",
+              "    pm.environment.set(\"tipo_entrada_id\", jsonData.tiposEntrada[0].id);",
+              "});"
+            ],
+            "type": "text/javascript",
+            "id": "fdacd538-c5aa-42ed-b9ef-8c471fd3286f"
+          }
+        }
+      ],
+      "id": "12429d3f-5610-4c53-bbba-8f6ecef09b57",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{jwt_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"nombre\": \"Rock Fest 2026\",\n    \"descripcion\": \"Festival de rock\",\n    \"ubicacion\": \"Estadio\",\n    \"fechaEvento\": \"2026-06-20T20:00:00\",\n    \"categoria\": \"Musica\",\n    \"tiposEntrada\": [\n        {\n            \"nombre\": \"General\",\n            \"descripcion\": \"Entrada general\",\n            \"precio\": 60.00,\n            \"cantidad\": 800,\n            \"orden\": 1\n        }\n    ]\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/orchestration/create-event",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "orchestration",
+            "create-event"
+          ]
+        },
+        "description": "Crea un evento con tipos de entrada. Requiere autenticación JWT."
+      },
+      "response": []
+    },
+    {
+      "name": "4. Comprar Ticket",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Ticket comprado correctamente\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.ticketId).to.not.be.undefined;",
+              "    pm.expect(jsonData.total).to.eql(120); // 2 tickets x 60",
+              "    ",
+              "    // Guardar ticket ID",
+              "    pm.environment.set(\"ticket_id\", jsonData.ticketId);",
+              "});"
+            ],
+            "type": "text/javascript",
+            "id": "0ea83380-3d09-4f5c-a322-655c84286f12"
+          }
+        }
+      ],
+      "id": "94ec59dd-41e4-44af-9927-e92c6cc534cc",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{jwt_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"tipoEntradaId\": {{tipo_entrada_id}},\n    \"cantidad\": 2,\n    \"paymentMethod\": {\n        \"cardNumber\": \"4532123456789012\",\n        \"cvv\": \"123\",\n        \"expiryDate\": \"12/28\",\n        \"cardHolder\": \"CARLOS LOPEZ\"\n    }\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/orchestration/purchase-ticket",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "orchestration",
+            "purchase-ticket"
+          ]
+        },
+        "description": "Ejecuta el proceso completo de compra de ticket con patrón SAGA:\n1. Valida stock\n2. Decrementa stock\n3. Procesa pago\n4. Crea ticket\n5. Envía notificación\n\nSi el pago falla, ejecuta compensación (restaura stock)."
+      },
+      "response": []
+    },
+    {
+      "name": "5. Mis Tickets",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Tickets obtenidos correctamente\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.be.an('array');",
+              "    pm.expect(jsonData.length).to.be.at.least(1);",
+              "    pm.expect(jsonData[0].eventoNombre).to.eql(\"Rock Fest 2026\");",
+              "});"
+            ],
+            "type": "text/javascript",
+            "id": "ea774e31-c4a5-4478-a285-aa3b04106f9b"
+          }
+        }
+      ],
+      "id": "e7f26ac4-7ecb-49cf-891e-9d536c8e0815",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{jwt_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/orchestration/my-tickets",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "orchestration",
+            "my-tickets"
+          ]
+        },
+        "description": "Obtiene todos los tickets del usuario autenticado."
+      },
+      "response": []
+    },
+    {
+      "name": "Gateway Health Check",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Gateway está funcionando\", function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.status).to.eql(\"UP\");",
+              "});"
+            ],
+            "type": "text/javascript",
+            "id": "5b14906c-56f6-429b-8a83-e7e25574d9a5"
+          }
+        }
+      ],
+      "id": "75a7880e-5f95-4c7a-b247-78091411ad67",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/health",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "health"
+          ]
+        },
+        "description": "Verifica que el Gateway esté activo y funcionando."
+      },
+      "response": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ],
+        "id": "987bfd0a-6b2f-41a1-a865-c5ff966d7214"
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ],
+        "id": "9a2325ea-8447-41b3-8c5d-1af1caeeac27"
+      }
+    }
+  ],
+  "variable": [
+    {
+      "id": "7f56af77-6bc2-4de2-b7b3-b191bfde70c5",
+      "key": "base_url",
+      "value": "http://localhost:8080",
+      "type": "string"
+    },
+    {
+      "id": "058136d9-1895-456e-b787-57851b59198f",
+      "key": "jwt_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "id": "3ffee519-c0a2-4711-b49e-ca2393969640",
+      "key": "user_email",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "id": "f931e77a-4a7e-43bb-bf90-5e85852a31de",
+      "key": "event_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "id": "a4e8cd37-4e62-47b5-be6d-5dc751097f2b",
+      "key": "tipo_entrada_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "id": "e4f68796-af5f-496d-a123-77a0ddeebc27",
+      "key": "ticket_id",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}
