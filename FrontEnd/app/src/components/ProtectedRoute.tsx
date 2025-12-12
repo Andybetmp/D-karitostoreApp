@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
@@ -16,8 +16,13 @@ const ProtectedRoute = ({ children, requireAdmin = false }: ProtectedRouteProps)
     const { user, isAdmin, openLoginModal } = useAuth();
 
     // Si no hay usuario, redirigir a home y abrir modal de login
+    useEffect(() => {
+        if (!user) {
+            openLoginModal();
+        }
+    }, [user, openLoginModal]);
+
     if (!user) {
-        openLoginModal();
         return <Navigate to="/" replace />;
     }
 

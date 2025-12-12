@@ -55,6 +55,7 @@ public class ProductService {
             existingProduct.setDescription(productDto.getDescription());
             existingProduct.setPrice(productDto.getPrice());
             existingProduct.setImg(productDto.getImg());
+            existingProduct.setCategory(productDto.getCategory());
             Product updatedProduct = productRepository.save(existingProduct);
             return convertToDto(updatedProduct);
         });
@@ -94,8 +95,8 @@ public class ProductService {
                 product.getTitle(),
                 product.getDescription(),
                 product.getPrice(),
-                product.getImg()
-        );
+                product.getImg(),
+                product.getCategory());
     }
 
     private Product convertToEntity(ProductDto productDto) {
@@ -104,6 +105,7 @@ public class ProductService {
         product.setDescription(productDto.getDescription());
         product.setPrice(productDto.getPrice());
         product.setImg(productDto.getImg());
+        product.setCategory(productDto.getCategory());
         return product;
     }
 }

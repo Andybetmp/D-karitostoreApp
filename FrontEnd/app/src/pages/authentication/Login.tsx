@@ -23,7 +23,7 @@ const logoWithText = '/Logo-with-text.png';
 
 const Login = (): ReactElement => {
   const navigate = useNavigate();
-  const { login, isLoading, error, clearError } = useAuth();
+  const { login, loginWithGoogle, isLoading, error, clearError } = useAuth();
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [formData, setFormData] = useState({
     email: '',
@@ -188,8 +188,12 @@ const Login = (): ReactElement => {
                 fontSize: 'subtitle2.fontSize',
                 fontWeight: 'fontWeightRegular',
               }}
+              onClick={() => {
+                loginWithGoogle({});
+                navigate(rootPaths.dashboard);
+              }}
             >
-              Google
+              Google (Admin Dev)
             </Button>
             <Button
               startIcon={<IconifyIcon icon="logos:facebook" />}

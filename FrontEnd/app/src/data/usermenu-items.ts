@@ -22,6 +22,13 @@ const userMenuItems: UserMenuItem[] = [
     path: '/settings',
   },
   {
+    id: 11,
+    title: 'My Orders',
+    icon: 'icon-park-solid:transaction-order',
+    color: 'text.primary',
+    path: '/my-orders',
+  },
+  {
     id: 3,
     title: 'Notifications',
     icon: 'ion:notifications',

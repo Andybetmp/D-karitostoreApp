@@ -153,7 +153,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       email: 'user@gmail.com',
       picture: null,
       provider: 'google',
-      roles: ['USER']
+      roles: ['ADMIN']
     };
     setUser(googleUser);
     setIsLoginModalOpen(false);

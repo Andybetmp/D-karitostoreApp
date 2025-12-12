@@ -75,4 +75,6 @@ public class OrderController {
         long count = orderService.getOrderCountByStatus(status);
         return ResponseEntity.ok(count);
     }
+
+    /* Stats endpoints moved to DashboardController to avoid conflicts */
 }

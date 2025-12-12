@@ -61,7 +61,7 @@ public class WebSecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOriginPatterns(Arrays.asList("http://localhost:3000"));
+        configuration.setAllowedOriginPatterns(Arrays.asList("http://localhost:3000", "http://localhost:3001"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowCredentials(true);
@@ -73,28 +73,33 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.cors(cors -> cors.configurationSource(corsConfigurationSource()))
-            .csrf(AbstractHttpConfigurer::disable)
-            .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            // ⚠️ TEMP: JWT DISABLED FOR TESTING - Uncomment below to re-enable authentication
-            .authorizeHttpRequests(auth -> auth
-                .anyRequest().permitAll()  // ⚠️ TEMP: Permite todas las peticiones sin autenticación
-            );
-            
-            /* ⚠️ ORIGINAL CODE - UNCOMMENT TO RE-ENABLE JWT:
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/auth/**", "/api/auth/**").permitAll()
-                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                .requestMatchers("/actuator/**").permitAll()
-                .anyRequest().authenticated()
-            );
-            */
+        http
+                // .cors(cors -> cors.configurationSource(corsConfigurationSource())) //
+                // Disabled to prevent duplicate headers with Gateway
+                .csrf(AbstractHttpConfigurer::disable)
+                .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                // ⚠️ TEMP: JWT DISABLED FOR TESTING - Uncomment below to re-enable
+                // authentication
+                .authorizeHttpRequests(auth -> auth
+                        .anyRequest().permitAll() // ⚠️ TEMP: Permite todas las peticiones sin autenticación
+                );
+
+        /*
+         * ⚠️ ORIGINAL CODE - UNCOMMENT TO RE-ENABLE JWT:
+         * .authorizeHttpRequests(auth -> auth
+         * .requestMatchers("/auth/**", "/api/auth/**").permitAll()
+         * .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+         * .requestMatchers("/actuator/**").permitAll()
+         * .anyRequest().authenticated()
+         * );
+         */
 
         http.authenticationProvider(authenticationProvider());
 
         // ⚠️ TEMP: JWT filter disabled - Uncomment to re-enable
-        // http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+        // http.addFilterBefore(authenticationJwtTokenFilter(),
+        // UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

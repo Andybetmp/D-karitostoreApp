@@ -4,10 +4,24 @@ import { ReactElement, useEffect, useRef } from 'react';
 import EChartsReactCore from 'echarts-for-react/lib/core';
 import { currencyFormat } from 'helpers/format-functions';
 
+import { dashboardService } from 'services/dashboardService';
+import { useState } from 'react';
+
 const Earnings = (): ReactElement => {
   const chartRef = useRef<EChartsReactCore | null>(null);
+  const [totalEarnings, setTotalEarnings] = useState<number>(0);
 
   useEffect(() => {
+    const fetchEarnings = async () => {
+      try {
+        const response = await dashboardService.getTodayStats();
+        setTotalEarnings(response.data.totalSales || 0);
+      } catch (error) {
+        console.error('Error fetching earnings:', error);
+      }
+    };
+    fetchEarnings();
+
     const handleResize = () => {
       if (chartRef.current) {
         const echartsInstance = chartRef.current.getEchartsInstance();
@@ -23,10 +37,10 @@ const Earnings = (): ReactElement => {
   return (
     <Paper sx={{ p: { xs: 4, sm: 8 }, height: 1 }}>
       <Typography variant="h4" color="common.white" mb={2.5}>
-        Earnings
+        Ventas de Hoy
       </Typography>
       <Typography variant="body1" color="text.primary" mb={4.5}>
-        Total Expense
+        Ganancias Totales (24h)
       </Typography>
       <Typography
         variant="h1"
@@ -34,10 +48,10 @@ const Earnings = (): ReactElement => {
         mb={4.5}
         fontSize={{ xs: 'h2.fontSize', sm: 'h1.fontSize' }}
       >
-        {currencyFormat(6078.76, { useGrouping: false })}
+        {currencyFormat(totalEarnings, { useGrouping: true })}
       </Typography>
       <Typography variant="body1" color="text.primary" mb={15}>
-        Profit is 48% More than last Month
+        Calculado en tiempo real
       </Typography>
       <Box
         flex={1}

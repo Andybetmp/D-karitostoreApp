@@ -13,6 +13,7 @@ com\dkarito\authservice\repository\UserRepository.class
 com\dkarito\authservice\security\UserDetailsImpl.class
 com\dkarito\authservice\security\UserDetailsServiceImpl.class
 com\dkarito\authservice\dto\RegisterRequest.class
+com\dkarito\authservice\config\DataSeeder.class
 com\dkarito\authservice\domain\User.class
 com\dkarito\authservice\dto\UserProfile.class
 com\dkarito\authservice\dto\AuthRequest.class

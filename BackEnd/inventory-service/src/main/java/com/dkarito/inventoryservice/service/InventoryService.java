@@ -78,7 +78,8 @@ public class InventoryService {
             int availableStock = inventory.getAvailableStock();
             if (availableStock >= quantity) {
                 inventory.setStock(inventory.getStock() - quantity);
-                inventory.setReservedStock(inventory.getReservedStock() - quantity);
+                // inventory.setReservedStock(inventory.getReservedStock() - quantity); // Fix:
+                // Do not decrement reserved if not previously reserved
                 inventoryRepository.save(inventory);
                 return true;
             }
@@ -108,8 +109,7 @@ public class InventoryService {
                 inventory.getId(),
                 inventory.getProductId(),
                 inventory.getStock(),
-                inventory.getReservedStock()
-        );
+                inventory.getReservedStock());
     }
 
     private Inventory convertToEntity(InventoryDto inventoryDto) {

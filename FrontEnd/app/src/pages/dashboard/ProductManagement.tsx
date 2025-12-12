@@ -1,4 +1,4 @@
-import { ReactElement, useState, useEffect } from 'react';
+import { ReactElement, useState, useEffect, useRef } from 'react';
 import {
     Box,
     Button,
@@ -19,6 +19,7 @@ import {
 } from '@mui/material';
 import IconifyIcon from 'components/base/IconifyIcon';
 import { productService, Product } from 'services/productService';
+import { inventoryService } from 'services/inventoryService';
 
 const ProductManagement = (): ReactElement => {
     const [products, setProducts] = useState<Product[]>([]);
@@ -26,29 +27,40 @@ const ProductManagement = (): ReactElement => {
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState<string | null>(null);
 
+    // Fix for memory leak warning
+    const isMounted = useRef(true);
+
     const [formData, setFormData] = useState<Omit<Product, 'id'>>({
-        name: '',
+        title: '',
         description: '',
         price: 0,
-        imageUrl: '',
+        img: '',
         category: '',
         stock: 0,
     });
 
     useEffect(() => {
+        isMounted.current = true;
         fetchProducts();
+        return () => {
+            isMounted.current = false;
+        };
     }, []);
 
     const fetchProducts = async () => {
         try {
-            setLoading(true);
+            if (isMounted.current) setLoading(true);
             const response = await productService.getAllProducts();
-            setProducts(response.data);
-            setError(null);
+            if (isMounted.current) {
+                setProducts(response.data);
+                setError(null);
+            }
         } catch (err: any) {
-            setError('Error al cargar productos: ' + (err.response?.data?.message || err.message));
+            if (isMounted.current) {
+                setError('Error al cargar productos: ' + (err.response?.data?.message || err.message));
+            }
         } finally {
-            setLoading(false);
+            if (isMounted.current) setLoading(false);
         }
     };
 
@@ -60,42 +72,69 @@ const ProductManagement = (): ReactElement => {
         }));
     };
 
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            setLoading(true);
-            await productService.createProduct(formData);
-            setSuccess('Producto agregado exitosamente');
-            setFormData({
-                name: '',
-                description: '',
-                price: 0,
-                imageUrl: '',
-                category: '',
-                stock: 0,
-            });
-            fetchProducts();
-            setTimeout(() => setSuccess(null), 3000);
+            if (isMounted.current) setLoading(true);
+
+            // 1. Create Product
+            const response = await productService.createProduct(formData);
+            const newProduct = response.data;
+
+            // 2. Create Inventory Record
+            if (newProduct.id) {
+                await inventoryService.createInventory({
+                    productId: newProduct.id,
+                    stock: formData.stock || 0,
+                    reservedStock: 0
+                });
+            }
+
+            if (isMounted.current) {
+                setSuccess('Producto y stock agregados exitosamente');
+                setFormData({
+                    title: '',
+                    description: '',
+                    price: 0,
+                    img: '',
+                    category: '',
+                    stock: 0,
+                });
+                fetchProducts();
+                setTimeout(() => {
+                    if (isMounted.current) setSuccess(null);
+                }, 3000);
+            }
         } catch (err: any) {
-            setError('Error al agregar producto: ' + (err.response?.data?.message || err.message));
+            if (isMounted.current) {
+                console.error("Error creating product/inventory:", err);
+                setError('Error al agregar producto: ' + (err.response?.data?.message || err.message));
+            }
         } finally {
-            setLoading(false);
+            if (isMounted.current) setLoading(false);
         }
     };
 
-    const handleDelete = async (id: string) => {
+    const handleDelete = async (id: number) => {
         if (!window.confirm('¿Estás seguro de eliminar este producto?')) return;
 
         try {
-            setLoading(true);
+            if (isMounted.current) setLoading(true);
             await productService.deleteProduct(id);
-            setSuccess('Producto eliminado exitosamente');
-            fetchProducts();
-            setTimeout(() => setSuccess(null), 3000);
+            if (isMounted.current) {
+                setSuccess('Producto eliminado exitosamente');
+                fetchProducts();
+                setTimeout(() => {
+                    if (isMounted.current) setSuccess(null);
+                }, 3000);
+            }
         } catch (err: any) {
-            setError('Error al eliminar producto: ' + (err.response?.data?.message || err.message));
+            if (isMounted.current) {
+                setError('Error al eliminar producto: ' + (err.response?.data?.message || err.message));
+            }
         } finally {
-            setLoading(false);
+            if (isMounted.current) setLoading(false);
         }
     };
 
@@ -128,8 +167,8 @@ const ProductManagement = (): ReactElement => {
                             <TextField
                                 fullWidth
                                 label="Nombre"
-                                name="name"
-                                value={formData.name}
+                                name="title"
+                                value={formData.title}
                                 onChange={handleInputChange}
                                 required
                                 margin="normal"
@@ -159,12 +198,36 @@ const ProductManagement = (): ReactElement => {
                             <TextField
                                 fullWidth
                                 label="URL de Imagen"
-                                name="imageUrl"
-                                value={formData.imageUrl}
+                                name="img"
+                                value={formData.img}
                                 onChange={handleInputChange}
                                 required
                                 margin="normal"
+                                helperText="Pega una URL o sube una imagen abajo"
                             />
+                            <Button
+                                variant="outlined"
+                                component="label"
+                                fullWidth
+                                sx={{ mb: 2 }}
+                            >
+                                Subir Imagen (Desde PC)
+                                <input
+                                    type="file"
+                                    hidden
+                                    accept="image/*"
+                                    onChange={(e) => {
+                                        const file = e.target.files?.[0];
+                                        if (file) {
+                                            const reader = new FileReader();
+                                            reader.onloadend = () => {
+                                                setFormData(prev => ({ ...prev, img: reader.result as string }));
+                                            };
+                                            reader.readAsDataURL(file);
+                                        }
+                                    }}
+                                />
+                            </Button>
                             <TextField
                                 fullWidth
                                 label="Categoría"
@@ -231,12 +294,16 @@ const ProductManagement = (): ReactElement => {
                                                 <TableRow key={product.id}>
                                                     <TableCell>
                                                         <img
-                                                            src={product.imageUrl}
-                                                            alt={product.name}
+                                                            src={product.img}
+                                                            alt={product.title}
                                                             style={{ width: 50, height: 50, objectFit: 'cover' }}
+                                                            onError={(e) => {
+                                                                e.currentTarget.src = 'https://placehold.co/100?text=No+Image';
+                                                                e.currentTarget.onerror = null;
+                                                            }}
                                                         />
                                                     </TableCell>
-                                                    <TableCell>{product.name}</TableCell>
+                                                    <TableCell>{product.title}</TableCell>
                                                     <TableCell>${product.price}</TableCell>
                                                     <TableCell>{product.category || '-'}</TableCell>
                                                     <TableCell>{product.stock || 0}</TableCell>

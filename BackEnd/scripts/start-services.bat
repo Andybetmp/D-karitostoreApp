@@ -31,7 +31,7 @@ echo Building and starting services in order...
 REM Build all services
 echo Building auth-service...
 cd auth-service
-mvn clean compile -q
+call mvn clean package -DskipTests -q
 if %errorlevel% neq 0 (
     echo ERROR: Failed to build auth-service
     cd ..
@@ -42,7 +42,7 @@ cd ..
 
 echo Building product-service...
 cd product-service
-mvn clean compile -q
+call mvn clean compile -q
 if %errorlevel% neq 0 (
     echo ERROR: Failed to build product-service
     cd ..
@@ -53,7 +53,7 @@ cd ..
 
 echo Building inventory-service...
 cd inventory-service
-mvn clean compile -q
+call mvn clean compile -q
 if %errorlevel% neq 0 (
     echo ERROR: Failed to build inventory-service
     cd ..
@@ -64,7 +64,7 @@ cd ..
 
 echo Building order-service...
 cd order-service
-mvn clean compile -q
+call mvn clean compile -q
 if %errorlevel% neq 0 (
     echo ERROR: Failed to build order-service
     cd ..
@@ -75,7 +75,7 @@ cd ..
 
 echo Building payment-service...
 cd payment-service
-mvn clean compile -q
+call mvn clean compile -q
 if %errorlevel% neq 0 (
     echo ERROR: Failed to build payment-service
     cd ..
@@ -86,7 +86,7 @@ cd ..
 
 echo Building api-gateway...
 cd api-gateway
-mvn clean compile -q
+call mvn clean compile -q
 if %errorlevel% neq 0 (
     echo ERROR: Failed to build api-gateway
     cd ..
@@ -103,22 +103,22 @@ echo Close the windows to stop the services.
 echo.
 
 REM Start services in separate windows
-start "Auth Service (Port 8081)" cmd /k "cd auth-service && mvn spring-boot:run"
+start "Auth Service (Port 8081)" cmd /k "cd auth-service && java -jar target/auth-service-0.0.1-SNAPSHOT.jar"
 timeout /t 5 /nobreak >nul
 
-start "Product Service (Port 8082)" cmd /k "cd product-service && mvn spring-boot:run"
+start "Product Service (Port 8082)" cmd /k "cd product-service && call mvn spring-boot:run"
 timeout /t 3 /nobreak >nul
 
-start "Inventory Service (Port 8083)" cmd /k "cd inventory-service && mvn spring-boot:run"
+start "Inventory Service (Port 8083)" cmd /k "cd inventory-service && call mvn spring-boot:run"
 timeout /t 3 /nobreak >nul
 
-start "Order Service (Port 8084)" cmd /k "cd order-service && mvn spring-boot:run"
+start "Order Service (Port 8084)" cmd /k "cd order-service && call mvn spring-boot:run"
 timeout /t 3 /nobreak >nul
 
-start "Payment Service (Port 8085)" cmd /k "cd payment-service && mvn spring-boot:run"
+start "Payment Service (Port 8085)" cmd /k "cd payment-service && call mvn spring-boot:run"
 timeout /t 3 /nobreak >nul
 
-start "API Gateway (Port 8080)" cmd /k "cd api-gateway && mvn spring-boot:run"
+start "API Gateway (Port 8080)" cmd /k "cd api-gateway && call mvn spring-boot:run"
 
 echo.
 echo Services starting up...

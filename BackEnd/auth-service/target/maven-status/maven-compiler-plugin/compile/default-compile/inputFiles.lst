@@ -12,5 +12,6 @@ C:\Users\andyj\Documents\git1\D-karitostoreApp\BackEnd\auth-service\src\main\jav
 C:\Users\andyj\Documents\git1\D-karitostoreApp\BackEnd\auth-service\src\main\java\com\dkarito\authservice\dto\RegisterRequest.java
 C:\Users\andyj\Documents\git1\D-karitostoreApp\BackEnd\auth-service\src\main\java\com\dkarito\authservice\security\UserDetailsImpl.java
 C:\Users\andyj\Documents\git1\D-karitostoreApp\BackEnd\auth-service\src\main\java\com\dkarito\authservice\service\AuthService.java
+C:\Users\andyj\Documents\git1\D-karitostoreApp\BackEnd\auth-service\src\main\java\com\dkarito\authservice\config\DataSeeder.java
 C:\Users\andyj\Documents\git1\D-karitostoreApp\BackEnd\auth-service\src\main\java\com\dkarito\authservice\dto\AuthResponse.java
 C:\Users\andyj\Documents\git1\D-karitostoreApp\BackEnd\auth-service\src\main\java\com\dkarito\authservice\security\JwtUtils.java

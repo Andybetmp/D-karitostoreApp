@@ -9,6 +9,7 @@ import {
   IconButton,
   Typography,
   InputAdornment,
+  Alert,
 } from '@mui/material';
 import IconifyIcon from 'components/base/IconifyIcon';
 import { useState, ReactElement } from 'react';
@@ -16,14 +17,41 @@ import { useNavigate } from 'react-router-dom';
 import { rootPaths } from 'routes/paths';
 import Image from 'components/base/Image';
 import logoWithText from 'assets/Logo-with-text.png';
+import { useAuth } from 'context/AuthContext';
 
 const SignUp = (): ReactElement => {
   const navigate = useNavigate();
+  const { register } = useAuth();
+
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [error, setError] = useState<string | null>(null);
+
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
 
-  const handleSubmit = () => {
-    navigate(rootPaths.dashboard);
+  const handleSubmit = async () => {
+    setError(null);
+
+    if (!name || !email || !password || !confirmPassword) {
+      setError('Please fill in all fields.');
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError('Passwords do not match.');
+      return;
+    }
+
+    try {
+      await register({ name, email, password });
+      navigate(rootPaths.dashboard);
+    } catch (err: any) {
+      console.error('Registration failed:', err);
+      setError(err.response?.data?.message || 'Registration failed. Please try again.');
+    }
   };
 
   const handleShowPassword = () => {
@@ -56,10 +84,15 @@ const SignUp = (): ReactElement => {
               Log In
             </Link>
           </Typography>
+
+          {error && <Alert severity="error">{error}</Alert>}
+
           <TextField
             variant="filled"
             label="Name"
             type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
             sx={{
               '.MuiFilledInput-root': {
                 bgcolor: 'grey.A100',
@@ -80,6 +113,8 @@ const SignUp = (): ReactElement => {
             variant="filled"
             label="Email"
             type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             sx={{
               '.MuiFilledInput-root': {
                 bgcolor: 'grey.A100',
@@ -100,6 +135,8 @@ const SignUp = (): ReactElement => {
             variant="filled"
             label="Password"
             type={showPassword ? 'text' : 'password'}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             sx={{
               '.MuiFilledInput-root': {
                 bgcolor: 'grey.A100',
@@ -141,6 +178,8 @@ const SignUp = (): ReactElement => {
             variant="filled"
             label="Confirm Password"
             type={showConfirmPassword ? 'text' : 'password'}
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
             sx={{
               '.MuiFilledInput-root': {
                 bgcolor: 'grey.A100',

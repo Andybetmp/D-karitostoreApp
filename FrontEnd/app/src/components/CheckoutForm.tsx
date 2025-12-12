@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { useCart } from '../context/CartContext';
+import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { Order } from '../types';
+import { orderService, CreateOrderRequest } from '../services/orderService';
 
 const CheckoutContainer = styled.div`
   min-height: 100vh;
@@ -162,6 +163,7 @@ const BackButton = styled.button`
 
 const Checkout: React.FC = () => {
   const { cart, clearCart, getTotalPrice } = useCart();
+  const { user } = useAuth();
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -204,43 +206,40 @@ const Checkout: React.FC = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!validateForm()) return;
 
-    // Simulate payment processing
-    setTimeout(() => {
-      const order: Order = {
-        id: Date.now().toString(),
-        user: {
-          name: formData.name,
-          email: formData.email,
-          phone: formData.phone,
-          address: formData.address
-        },
-        items: cart,
-        total: getTotalPrice(),
-        paymentMethod: formData.paymentMethod as 'card' | 'wallet',
-        cardDetails: formData.paymentMethod === 'card' ? {
-          number: formData.cardNumber,
-          expiry: formData.expiry,
-          cvv: formData.cvv
-        } : undefined,
-        createdAt: new Date()
+    if (!user) {
+      alert("Debes iniciar sesión para realizar una compra.");
+      navigate('/login');
+      return;
+    }
+
+    try {
+      const orderRequest: CreateOrderRequest = {
+        userId: user.id,
+        shippingAddress: formData.address,
+        totalAmount: getTotalPrice(),
+        items: cart.map(item => ({
+          productId: Number(item.id), // Ensure ID is number
+          productTitle: item.title,
+          price: item.price || 0,
+          quantity: item.quantity
+        }))
       };
 
-      // Save order to localStorage (simulate backend)
-      const existingOrders = JSON.parse(localStorage.getItem('d-karito-orders') || '[]');
-      existingOrders.push(order);
-      localStorage.setItem('d-karito-orders', JSON.stringify(existingOrders));
+      await orderService.createOrder(orderRequest);
 
       // Clear cart
       clearCart();
-
       // Show success message
       setIsSubmitted(true);
-    }, 2000); // Simulate 2 second processing
+    } catch (error) {
+      console.error("Error creating order:", error);
+      alert("Hubo un error al procesar tu pedido. Inténtalo de nuevo.");
+    }
   };
 
   if (isSubmitted) {

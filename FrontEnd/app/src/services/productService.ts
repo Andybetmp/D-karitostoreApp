@@ -1,26 +1,26 @@
 import apiClient from './api';
 
 export interface Product {
-    id?: string;
-    name: string;
+    id?: number;
+    title: string;
     description: string;
     price: number;
-    imageUrl: string;
+    img: string;
     category?: string;
     stock?: number;
 }
 
 export const productService = {
-    getAllProducts: () => apiClient.get<Product[]>('/products'),
+    getAllProducts: () => apiClient.get<Product[]>('/products?page=0&size=2147483647'),
 
-    getProductById: (id: string) => apiClient.get<Product>(`/products/${id}`),
+    getProductById: (id: number) => apiClient.get<Product>(`/products/${id}`),
 
     createProduct: (product: Omit<Product, 'id'>) =>
         apiClient.post<Product>('/products', product),
 
-    updateProduct: (id: string, product: Partial<Product>) =>
+    updateProduct: (id: number, product: Partial<Product>) =>
         apiClient.put<Product>(`/products/${id}`, product),
 
-    deleteProduct: (id: string) =>
+    deleteProduct: (id: number) =>
         apiClient.delete(`/products/${id}`),
 };

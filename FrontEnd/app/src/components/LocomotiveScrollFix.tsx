@@ -64,18 +64,18 @@ const LocomotiveScrollFix = () => {
                     }
                 });
 
-                if (fixed > 0) {
-                    console.log(`[LocomotiveScrollFix] Fixed ${fixed} invalid attributes`);
-                }
+                // if (fixed > 0) {
+                //     console.log(`[LocomotiveScrollFix] Fixed ${fixed} invalid attributes`);
+                // }
 
                 // Update locomotive scroll if available
-                if (scroll) {
-                    try {
-                        scroll.update();
-                    } catch (err) {
-                        console.warn('[LocomotiveScrollFix] Error updating scroll:', err);
-                    }
-                }
+                // if (scroll) {
+                //     try {
+                //         scroll.update();
+                //     } catch (err) {
+                //         console.warn('[LocomotiveScrollFix] Error updating scroll:', err);
+                //     }
+                // }
             } catch (error) {
                 console.warn('[LocomotiveScrollFix] Error in fixScrollAttributes:', error);
             }

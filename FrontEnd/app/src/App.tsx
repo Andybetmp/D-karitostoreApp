@@ -9,14 +9,14 @@ import 'locomotive-scroll/dist/locomotive-scroll.css'
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { Routes, Route, useLocation } from 'react-router-dom';
 
-import Home from "./sections/Home";
+import Home from "./components/sections/Home";
 import { AnimatePresence } from "framer-motion";
-import About from "./sections/About";
-import Shop from "./sections/Shop";
+import About from "./components/sections/About";
+import Shop from "./components/sections/Shop";
 import ScrollTriggerProxy from './components/ScrollTriggerProxy';
-import Banner from "./sections/Banner";
-import NewArrival from "./sections/NewArrival";
-import Footer from './sections/Footer';
+import Banner from "./components/sections/Banner";
+import NewArrival from "./components/sections/NewArrival";
+import Footer from "./components/sections/Footer";
 import Loader from "./components/Loader";
 import LoginModal from "./components/LoginModal";
 import CartModal from "./components/CartModal";
@@ -33,6 +33,7 @@ import BreakpointsProvider from 'providers/BreakpointsProvider';
 import MainLayout from './layouts/main-layout';
 import LocomotiveScrollFix from './components/LocomotiveScrollFix';
 import ProtectedRoute from './components/ProtectedRoute';
+import MyOrders from './pages/orders/MyOrders';
 
 
 function App() {
@@ -93,11 +94,16 @@ function App() {
                     <Route path="/admin" element={<div>Admin Panel - Coming Soon</div>} />
                     <Route path="/login" element={<Login />} />
                     <Route path={rootPaths.dashboard} element={
-                      <ProtectedRoute requireAdmin={true}>
+                      <ProtectedRoute requireAdmin={false}>
                         <MainLayout>
                           <Dashboard />
                         </MainLayout>
                       </ProtectedRoute>
+                    } />
+                    <Route path="/my-orders" element={
+                      <MainLayout>
+                        <MyOrders />
+                      </MainLayout>
                     } />
                     <Route path="/dashboard/products" element={
                       <ProtectedRoute requireAdmin={true}>

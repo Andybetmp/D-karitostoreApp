@@ -390,7 +390,7 @@ const LoginModal = () => {
             <Divider>O continúa con</Divider>
 
             <GoogleButtonWrapper>
-              <GoogleLogin
+              {/* <GoogleLogin
                 onSuccess={handleGoogleSuccess}
                 onError={handleGoogleError}
                 theme="filled_black"
@@ -398,7 +398,10 @@ const LoginModal = () => {
                 text={activeTab === 'login' ? 'signin_with' : 'signup_with'}
                 shape="rectangular"
                 logo_alignment="left"
-              />
+              /> */}
+              <Button type="button" onClick={() => handleGoogleSuccess({})}>
+                Login as Admin (Dev)
+              </Button>
             </GoogleButtonWrapper>
           </ModalContainer>
         </Overlay>

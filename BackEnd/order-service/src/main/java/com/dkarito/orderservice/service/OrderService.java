@@ -21,6 +21,9 @@ public class OrderService {
     @Autowired
     private OrderRepository orderRepository;
 
+    @Autowired
+    private org.springframework.web.reactive.function.client.WebClient.Builder webClientBuilder;
+
     public List<OrderDto> getOrdersByUserId(Long userId) {
         return orderRepository.findByUserIdOrderByCreatedAtDesc(userId)
                 .stream()
@@ -45,15 +48,34 @@ public class OrderService {
                     itemRequest.getProductId(),
                     itemRequest.getProductTitle(),
                     itemRequest.getPrice(),
-                    itemRequest.getQuantity()
-            );
+                    itemRequest.getQuantity());
             order.getOrderItems().add(orderItem);
             totalAmount = totalAmount.add(itemRequest.getTotalPrice());
+
+            // Deduct inventory
+            deductInventory(itemRequest.getProductId(), itemRequest.getQuantity());
         }
         order.setTotalAmount(totalAmount);
 
         Order savedOrder = orderRepository.save(order);
         return new OrderDto(savedOrder);
+    }
+
+    private void deductInventory(Long productId, Integer quantity) {
+        // Assuming API Gateway is at localhost:8080
+        String inventoryServiceUrl = "http://localhost:8080/api/inventory";
+
+        try {
+            webClientBuilder.build()
+                    .post()
+                    .uri(inventoryServiceUrl + "/" + productId + "/deduct?quantity=" + quantity)
+                    .retrieve()
+                    .toBodilessEntity()
+                    .block(); // Synchronous call for simplicity in this transactional scope
+        } catch (Exception e) {
+            e.printStackTrace(); // Debugging: Print stack trace to console
+            throw new RuntimeException("Failed to deduct inventory for product " + productId + ": " + e.getMessage());
+        }
     }
 
     @Transactional
@@ -81,5 +103,29 @@ public class OrderService {
 
     public long getOrderCountByStatus(Order.OrderStatus status) {
         return orderRepository.countByStatus(status);
+    }
+
+    public com.dkarito.orderservice.dto.TodayStats getTodayStats() {
+        java.time.LocalDateTime startOfDay = java.time.LocalDate.now().atStartOfDay();
+        BigDecimal totalSales = orderRepository.sumTotalAmountByCreatedAtAfter(startOfDay);
+        if (totalSales == null)
+            totalSales = BigDecimal.ZERO;
+
+        Long orderCount = orderRepository.countOrdersByCreatedAtAfter(startOfDay);
+        if (orderCount == null)
+            orderCount = 0L;
+
+        return new com.dkarito.orderservice.dto.TodayStats(totalSales, orderCount);
+    }
+
+    public com.dkarito.orderservice.dto.SummaryStats getSummaryStats() {
+        long total = orderRepository.count();
+        long pending = orderRepository.countByStatus(Order.OrderStatus.PENDING);
+        long delivered = orderRepository.countByStatus(Order.OrderStatus.DELIVERED);
+        return new com.dkarito.orderservice.dto.SummaryStats(total, pending, delivered);
+    }
+
+    public List<com.dkarito.orderservice.dto.TopProductDto> getTopSellingProducts() {
+        return orderRepository.findTopSellingProducts(org.springframework.data.domain.PageRequest.of(0, 5));
     }
 }

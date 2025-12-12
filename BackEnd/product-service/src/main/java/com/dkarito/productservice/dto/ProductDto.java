@@ -22,14 +22,18 @@ public class ProductDto {
     @NotBlank(message = "Image URL is required")
     private String img;
 
-    public ProductDto() {}
+    private String category;
 
-    public ProductDto(Long id, String title, String description, BigDecimal price, String img) {
+    public ProductDto() {
+    }
+
+    public ProductDto(Long id, String title, String description, BigDecimal price, String img, String category) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.price = price;
         this.img = img;
+        this.category = category;
     }
 
     // Getters and Setters
@@ -71,5 +75,13 @@ public class ProductDto {
 
     public void setImg(String img) {
         this.img = img;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 }

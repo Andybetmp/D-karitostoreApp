@@ -25,8 +25,10 @@ public class Product {
     @NotNull
     private BigDecimal price;
 
-    @NotBlank
+    @Column(columnDefinition = "TEXT")
     private String img;
+
+    private String category;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -45,13 +47,15 @@ public class Product {
         updatedAt = LocalDateTime.now();
     }
 
-    public Product() {}
+    public Product() {
+    }
 
-    public Product(String title, String description, BigDecimal price, String img) {
+    public Product(String title, String description, BigDecimal price, String img, String category) {
         this.title = title;
         this.description = description;
         this.price = price;
         this.img = img;
+        this.category = category;
     }
 
     // Getters and Setters
@@ -93,6 +97,14 @@ public class Product {
 
     public void setImg(String img) {
         this.img = img;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     public LocalDateTime getCreatedAt() {
