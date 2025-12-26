@@ -194,10 +194,19 @@ const Shop = () => {
     const fetchProducts = async () => {
       try {
         const response = await productService.getAllProducts();
-        setProducts(Array.isArray(response.data) ? response.data : []);
+        // Handle paginated response - response.data contains {content: [], totalElements: ...}
+        const productData = response.data;
+        if (productData && typeof productData === 'object' && 'content' in productData) {
+          // Paginated response
+          setProducts(Array.isArray(productData.content) ? productData.content : []);
+        } else if (Array.isArray(productData)) {
+          // Direct array response
+          setProducts(productData);
+        } else {
+          setProducts([]);
+        }
       } catch (error) {
         console.error('Error loading products:', error);
-        // Si falla, usar productos de ejemplo
         setProducts([]);
       } finally {
         setLoading(false);
