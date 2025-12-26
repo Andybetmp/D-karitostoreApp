@@ -39,6 +39,8 @@ const ProductManagement = (): ReactElement => {
         stock: 0,
     });
 
+    const [editingId, setEditingId] = useState<number | null>(null);
+
     useEffect(() => {
         isMounted.current = true;
         fetchProducts();
@@ -46,6 +48,31 @@ const ProductManagement = (): ReactElement => {
             isMounted.current = false;
         };
     }, []);
+
+    const handleEdit = (product: Product) => {
+        setFormData({
+            title: product.title,
+            description: product.description,
+            price: product.price,
+            img: product.img,
+            category: product.category || '',
+            stock: product.stock || 0,
+        });
+        setEditingId(product.id || null);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    const cancelEdit = () => {
+        setFormData({
+            title: '',
+            description: '',
+            price: 0,
+            img: '',
+            category: '',
+            stock: 0,
+        });
+        setEditingId(null);
+    };
 
     const fetchProducts = async () => {
         try {
@@ -78,29 +105,39 @@ const ProductManagement = (): ReactElement => {
         try {
             if (isMounted.current) setLoading(true);
 
-            // 1. Create Product
-            const response = await productService.createProduct(formData);
-            const newProduct = response.data;
+            if (editingId) {
+                // UPDATE Logic
+                await productService.updateProduct(editingId, formData);
 
-            // 2. Create Inventory Record
-            if (newProduct.id) {
-                await inventoryService.createInventory({
-                    productId: newProduct.id,
+                // Update Inventory (Stock)
+                // Note: Ideally backend handles this consistency, but for now we call the service explicitly
+                await inventoryService.updateInventory(editingId, {
+                    productId: editingId,
                     stock: formData.stock || 0,
-                    reservedStock: 0
+                    reservedStock: 0 // We assume we reset or keep reserved, but updateInventory usually overrides
                 });
+
+                if (isMounted.current) {
+                    setSuccess('Producto actualizado exitosamente');
+                }
+            } else {
+                // CREATE Logic
+                const response = await productService.createProduct(formData);
+                const newProduct = response.data;
+                if (newProduct.id) {
+                    await inventoryService.createInventory({
+                        productId: newProduct.id,
+                        stock: formData.stock || 0,
+                        reservedStock: 0
+                    });
+                }
+                if (isMounted.current) {
+                    setSuccess('Producto y stock agregados exitosamente');
+                }
             }
 
             if (isMounted.current) {
-                setSuccess('Producto y stock agregados exitosamente');
-                setFormData({
-                    title: '',
-                    description: '',
-                    price: 0,
-                    img: '',
-                    category: '',
-                    stock: 0,
-                });
+                cancelEdit(); // Reset form
                 fetchProducts();
                 setTimeout(() => {
                     if (isMounted.current) setSuccess(null);
@@ -108,8 +145,8 @@ const ProductManagement = (): ReactElement => {
             }
         } catch (err: any) {
             if (isMounted.current) {
-                console.error("Error creating product/inventory:", err);
-                setError('Error al agregar producto: ' + (err.response?.data?.message || err.message));
+                console.error("Error saving product:", err);
+                setError('Error al guardar producto: ' + (err.response?.data?.message || err.message));
             }
         } finally {
             if (isMounted.current) setLoading(false);
@@ -161,7 +198,7 @@ const ProductManagement = (): ReactElement => {
                 <Grid item xs={12} md={4}>
                     <Card sx={{ p: 3 }}>
                         <Typography variant="h6" gutterBottom>
-                            Agregar Nuevo Producto
+                            {editingId ? 'Editar Producto' : 'Agregar Nuevo Producto'}
                         </Typography>
                         <Box component="form" onSubmit={handleSubmit}>
                             <TextField
@@ -246,15 +283,26 @@ const ProductManagement = (): ReactElement => {
                                 margin="normal"
                                 inputProps={{ min: 0 }}
                             />
-                            <Button
-                                type="submit"
-                                variant="contained"
-                                fullWidth
-                                sx={{ mt: 2 }}
-                                disabled={loading}
-                            >
-                                {loading ? <CircularProgress size={24} /> : 'Agregar Producto'}
-                            </Button>
+                            <Box display="flex" gap={2} mt={2}>
+                                {editingId && (
+                                    <Button
+                                        variant="outlined"
+                                        fullWidth
+                                        onClick={cancelEdit}
+                                        color="inherit"
+                                    >
+                                        Cancelar
+                                    </Button>
+                                )}
+                                <Button
+                                    type="submit"
+                                    variant="contained"
+                                    fullWidth
+                                    disabled={loading}
+                                >
+                                    {loading ? <CircularProgress size={24} /> : (editingId ? 'Actualizar' : 'Agregar')}
+                                </Button>
+                            </Box>
                         </Box>
                     </Card>
                 </Grid>
@@ -308,6 +356,14 @@ const ProductManagement = (): ReactElement => {
                                                     <TableCell>{product.category || '-'}</TableCell>
                                                     <TableCell>{product.stock || 0}</TableCell>
                                                     <TableCell>
+                                                        <IconButton
+                                                            color="primary"
+                                                            onClick={() => handleEdit(product)}
+                                                            disabled={loading}
+                                                            sx={{ mr: 1 }}
+                                                        >
+                                                            <IconifyIcon icon="mdi:pencil" />
+                                                        </IconButton>
                                                         <IconButton
                                                             color="error"
                                                             onClick={() => product.id && handleDelete(product.id)}
