@@ -20,4 +20,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> searchByKeyword(@Param("keyword") String keyword);
 
     List<Product> findAllByOrderByCreatedAtDesc();
+
+    boolean existsByTitle(String title);
 }

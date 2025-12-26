@@ -62,8 +62,9 @@ public class OrderService {
     }
 
     private void deductInventory(Long productId, Integer quantity) {
-        // Assuming API Gateway is at localhost:8080
-        String inventoryServiceUrl = "http://localhost:8080/api/inventory";
+        // Direct connection to Inventory Service (Bypassing Gateway for internal
+        // communication)
+        String inventoryServiceUrl = "http://localhost:8083/api/inventory";
 
         try {
             webClientBuilder.build()

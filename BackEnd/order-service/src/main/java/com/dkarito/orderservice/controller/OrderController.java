@@ -40,9 +40,17 @@ public class OrderController {
 
     @PostMapping
     @Operation(summary = "Create a new order")
-    public ResponseEntity<OrderDto> createOrder(@Valid @RequestBody CreateOrderRequest request) {
-        OrderDto order = orderService.createOrder(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(order);
+    public ResponseEntity<?> createOrder(@Valid @RequestBody CreateOrderRequest request) {
+        try {
+            OrderDto order = orderService.createOrder(request);
+            return ResponseEntity.status(HttpStatus.CREATED).body(order);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error creating order: " + e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Invalid request: " + e.getMessage());
+        }
     }
 
     @PutMapping("/{id}/status")
