@@ -1,0 +1,38 @@
+﻿# Dependencias y entornos
+node_modules/
+vendor/
+venv/
+.venv/
+env/
+__pycache__/
+*.pyc
+
+# Archivos de entorno y secretos
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# CompilaciÃ³n y builds
+dist/
+build/
+target/
+*.class
+*.jar
+*.war
+.next/
+out/
+
+# Sistema y editores
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.log
+
+# Scripts temporales de automatizaciÃ³n
+temp_*.bat
+temp_*.sh
+branch_structure.json

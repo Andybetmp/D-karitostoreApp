@@ -14,31 +14,19 @@ import { stringAvatar } from 'helpers/string-avatar';
 
 const SlideItem = ({ trendingItem }: { trendingItem: TrendingItem }): ReactElement => {
   return (
-    <Card
-      sx={{
-        bgcolor: 'background.default',
-        height: 1,
-      }}
-    >
-      <CardMedia
-        image={trendingItem.imgsrc}
-        sx={{
-          height: 187,
-        }}
-      />
-      <CardContent
-        sx={{
-          height: 110,
-        }}
-      >
-        <Typography variant="body1" color="text.secondary" mb={2}>
+    <Card sx={{ bgcolor: 'background.default', height: 1 }}>
+      <CardMedia image={trendingItem.imgsrc} sx={{ height: 187 }} />
+      <CardContent sx={{ height: 115 }}>
+        <Typography variant="body1" color="common.white" fontWeight={600} mb={1.5} noWrap>
           {trendingItem.name}
         </Typography>
-        <Stack direction="row" justifyContent="space-between" color="text.primary" mb={2}>
-          <Typography variant="body2">Popularity</Typography>
-          <Typography variant="body2">{trendingItem.popularity}%</Typography>
+        <Stack direction="row" justifyContent="space-between" color="text.primary" mb={1.5}>
+          <Typography variant="body2">Demanda</Typography>
+          <Typography variant="body2" fontWeight={700} color="primary.main">
+            {trendingItem.popularity}%
+          </Typography>
         </Stack>
-        <Stack gap={2}>
+        <Stack gap={1.5}>
           <LinearProgress variant="determinate" color="info" value={trendingItem.popularity} />
           <AvatarGroup max={4}>
             {trendingItem.users.map((user, idx) => (

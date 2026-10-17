@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { ReactElement, useCallback, useEffect, useRef } from 'react';
 import { Box, Button, Divider, Paper, Stack, Typography, alpha, useTheme } from '@mui/material';
 import EChartsReactCore from 'echarts-for-react/lib/core';
@@ -29,9 +30,12 @@ const CustomerFulfillment = (): ReactElement => {
   );
 
   return (
-    <Paper sx={{ p: { xs: 4, sm: 8 }, height: 1 }}>
+    <Paper sx={{ p: { xs: 4, sm: 6 }, height: 1 }}>
       <Typography variant="h4" color="common.white">
-        Customer Fulfillment
+        Cumplimiento de Pedidos
+      </Typography>
+      <Typography variant="caption" color="text.secondary" display="block" mb={1}>
+        Despachos confirmados a nivel nacional
       </Typography>
       <CustomerFulfillmentChart
         chartRef={chartRef}
@@ -50,12 +54,8 @@ const CustomerFulfillment = (): ReactElement => {
         }
         px={2}
         pt={3}
-        sx={{
-          transitionProperty: 'all',
-          transitionDelay: '1s',
-        }}
       >
-        <Stack gap={1.25} alignItems="center">
+        <Stack gap={1} alignItems="center">
           <Button
             variant="text"
             sx={{
@@ -63,33 +63,21 @@ const CustomerFulfillment = (): ReactElement => {
               borderRadius: 1,
               fontSize: 'body2.fontSize',
               color: 'text.disabled',
-              '&:hover': {
-                bgcolor: 'transparent',
-              },
-              '& .MuiButton-startIcon': {
-                mx: 0,
-                mr: 1,
-              },
+              '&:hover': { bgcolor: 'transparent' },
+              '& .MuiButton-startIcon': { mx: 0, mr: 1 },
             }}
             disableRipple
             startIcon={
-              <Box
-                sx={{
-                  width: 6,
-                  height: 6,
-                  bgcolor: 'secondary.main',
-                  borderRadius: 400,
-                }}
-              />
+              <Box sx={{ width: 6, height: 6, bgcolor: 'secondary.main', borderRadius: 400 }} />
             }
           >
-            This Month
+            Este Mes
           </Button>
-          <Typography variant="body2" color="common.white">
+          <Typography variant="body2" color="common.white" fontWeight={700}>
             {getTotalFulfillment(customerFulfillmentData['This Month'])}
           </Typography>
         </Stack>
-        <Stack gap={1.25} alignItems="center">
+        <Stack gap={1} alignItems="center">
           <Button
             variant="text"
             sx={{
@@ -97,29 +85,17 @@ const CustomerFulfillment = (): ReactElement => {
               borderRadius: 1,
               fontSize: 'body2.fontSize',
               color: 'text.disabled',
-              '&:hover': {
-                bgcolor: 'transparent',
-              },
-              '& .MuiButton-startIcon': {
-                mx: 0,
-                mr: 1,
-              },
+              '&:hover': { bgcolor: 'transparent' },
+              '& .MuiButton-startIcon': { mx: 0, mr: 1 },
             }}
             disableRipple
             startIcon={
-              <Box
-                sx={{
-                  width: 6,
-                  height: 6,
-                  bgcolor: 'primary.main',
-                  borderRadius: 400,
-                }}
-              />
+              <Box sx={{ width: 6, height: 6, bgcolor: 'primary.main', borderRadius: 400 }} />
             }
           >
-            Last Month
+            Mes Anterior
           </Button>
-          <Typography variant="body2" color="common.white">
+          <Typography variant="body2" color="common.white" fontWeight={700}>
             {getTotalFulfillment(customerFulfillmentData['Last Month'])}
           </Typography>
         </Stack>

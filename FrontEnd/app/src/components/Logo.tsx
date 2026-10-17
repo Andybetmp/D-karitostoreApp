@@ -6,20 +6,20 @@ import { motion } from "framer-motion";
 
 const Container = styled.div`
   position: absolute;
-  top: 1rem;
-  left: 1rem;
-
-  width: 100%;
+  top: 1.25rem;
+  left: 1.5rem;
+  width: auto;
   color: ${(props) => props.theme.text};
-  z-index: 5;
+  z-index: 25;
 
   a {
     display: flex;
     align-items: flex-end;
+    gap: 0.4rem;
   }
 
   svg {
-    width: 4rem;
+    width: 3.5rem;
     height: auto;
     overflow: visible;
     stroke-linejoin: round;
@@ -35,41 +35,26 @@ const Container = styled.div`
 
 const Text = styled(motion.span)`
   font-size: ${(props) => props.theme.fontlg};
+  font-family: "Kaushan Script";
   color: ${(props) => props.theme.text};
-  padding-bottom: 0.5rem;
+  padding-bottom: 0.4rem;
 `;
 
 const textVariants = {
-  hidden: {
-    opacity: 0,
-    x: -50,
-  },
+  hidden: { opacity: 0, x: -30 },
   visible: {
     opacity: 1,
-    x: -5,
-
-    transition: {
-      duration: 2, // 2
-      delay: 5,
-      ease: "easeInOut",
-    },
+    x: 0,
+    transition: { duration: 1.2, delay: 2.2, ease: "easeInOut" },
   },
 };
 
 const pathVariants = {
-  hidden: {
-    opacity: 0,
-    pathLength: 0,
-  },
+  hidden: { opacity: 0, pathLength: 0 },
   visible: {
     opacity: 1,
     pathLength: 1,
-
-    transition: {
-      duration: 2,
-      delay: 3,
-      ease: "easeInOut",
-    },
+    transition: { duration: 1.4, delay: 2.0, ease: "easeInOut" },
   },
 };
 
@@ -85,7 +70,6 @@ const Logo = () => {
           width="48px"
           fill="none"
         >
-          <g></g>
           <g>
             <motion.path
               variants={pathVariants}
@@ -96,7 +80,7 @@ const Logo = () => {
           </g>
         </svg>
         <Text variants={textVariants} initial="hidden" animate="visible">
-          D'karitoStore
+          D&apos;KaritoStore
         </Text>
       </Link>
     </Container>

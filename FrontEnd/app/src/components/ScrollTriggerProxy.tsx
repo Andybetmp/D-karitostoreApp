@@ -12,12 +12,12 @@ const ScrollTriggerProxy = () => {
   useEffect(() => {
     if (!scroll || !scroll.el) return;
 
-    const element = scroll.el;
+    const element = scroll.el as HTMLElement;
+    let isMounted = true;
 
-    // Wait for locomotive scroll to be fully initialized
     const initProxy = () => {
+      if (!isMounted || !element || !element.isConnected) return;
       try {
-        // Ensure all data-scroll elements have valid speed attributes
         const scrollElements = element.querySelectorAll('[data-scroll]');
         scrollElements.forEach((el) => {
           if (!el.hasAttribute('data-scroll-speed')) {
@@ -29,17 +29,21 @@ const ScrollTriggerProxy = () => {
           }
         });
 
-        // Update locomotive scroll
-        scroll.update();
+        if (typeof scroll.update === 'function') {
+          scroll.update();
+        }
 
-        // Setup ScrollTrigger proxy
         scroll.on("scroll", ScrollTrigger.update);
 
         ScrollTrigger.scrollerProxy(element, {
           scrollTop(value) {
-            return arguments.length
-              ? scroll.scrollTo(value, 0, 0)
-              : scroll.scroll.instance.scroll.y;
+            if (!isMounted || !element.isConnected || !scroll?.scroll?.instance) {
+              return 0;
+            }
+            if (arguments.length && typeof value === 'number') {
+              scroll.scrollTo(value, { duration: 0, disableLerp: true });
+            }
+            return scroll.scroll?.instance?.scroll?.y ?? 0;
           },
           getBoundingClientRect() {
             return {
@@ -49,25 +53,31 @@ const ScrollTriggerProxy = () => {
               height: window.innerHeight,
             };
           },
-          pinType: element.style.transform ? "transform" : "fixed",
+          pinType: element.style?.transform ? "transform" : "fixed",
         });
 
-        // Refresh ScrollTrigger after setup
         ScrollTrigger.refresh();
       } catch (error) {
         console.warn('ScrollTrigger proxy setup error:', error);
       }
     };
 
-    // Delay initialization to ensure DOM is ready
     const timer = setTimeout(initProxy, 500);
 
     return () => {
+      isMounted = false;
       clearTimeout(timer);
-      if (scroll) {
-        scroll.off("scroll", ScrollTrigger.update);
+      try {
+        if (scroll) {
+          scroll.off("scroll", ScrollTrigger.update);
+          if (scroll.scroll && typeof scroll.scroll.stopScrolling === 'function') {
+            scroll.scroll.stopScrolling();
+          }
+        }
+        ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+      } catch (_) {
+        // Ignore cleanup errors during unmount
       }
-      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
     };
   }, [scroll]);
 

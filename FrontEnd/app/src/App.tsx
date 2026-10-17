@@ -28,6 +28,7 @@ import Login from "./pages/authentication/Login";
 import SignUp from "./pages/authentication/SignUp";
 import Dashboard from "./pages/dashboard/Dashboard";
 import ProductManagement from "./pages/dashboard/ProductManagement";
+import PaymentManagement from "./pages/dashboard/PaymentManagement";
 import { rootPaths } from "./routes/paths";
 import BreakpointsProvider from 'providers/BreakpointsProvider';
 import MainLayout from './layouts/main-layout';
@@ -35,22 +36,23 @@ import LocomotiveScrollFix from './components/LocomotiveScrollFix';
 import ProtectedRoute from './components/ProtectedRoute';
 import MyOrders from './pages/orders/MyOrders';
 
-
 function App() {
   const location = useLocation();
   const containerRef = useRef(null);
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    setTimeout(() => {
-      setLoaded(true);
-    }, 3000);
-  }, [])
+    if (location.pathname === '/') {
+      setLoaded(false);
+      const timer = setTimeout(() => {
+        setLoaded(true);
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [location.pathname]);
 
-  // Rutas donde NO debe aparecer el carrito flotante
-  const hideCartRoutes = ['/dashboard', '/login', '/authentication/sign-up', '/admin', '/profile', '/settings'];
+  const hideCartRoutes = ['/dashboard', '/login', '/authentication/sign-up', '/admin', '/profile', '/settings', '/my-orders', '/checkout'];
   const shouldShowCart = !hideCartRoutes.some(route => location.pathname.startsWith(route));
-
 
   return (
     <>
@@ -79,7 +81,7 @@ function App() {
                           {loaded ? null : <Loader />}
                         </AnimatePresence>
                         <ScrollTriggerProxy />
-                        <main className='App' data-scroll-container ref={containerRef}>
+                        <main className='App' data-scroll-container data-scroll-persistent ref={containerRef}>
                           <Home />
                           <About />
                           <Shop />
@@ -91,7 +93,13 @@ function App() {
                       </LocomotiveScrollProvider>
                     } />
                     <Route path="/checkout" element={<CheckoutForm />} />
-                    <Route path="/admin" element={<div>Admin Panel - Coming Soon</div>} />
+                    <Route path="/admin" element={
+                      <ProtectedRoute requireAdmin={false}>
+                        <MainLayout>
+                          <Dashboard />
+                        </MainLayout>
+                      </ProtectedRoute>
+                    } />
                     <Route path="/login" element={<Login />} />
                     <Route path={rootPaths.dashboard} element={
                       <ProtectedRoute requireAdmin={false}>
@@ -109,6 +117,13 @@ function App() {
                       <ProtectedRoute requireAdmin={true}>
                         <MainLayout>
                           <ProductManagement />
+                        </MainLayout>
+                      </ProtectedRoute>
+                    } />
+                    <Route path="/dashboard/payments" element={
+                      <ProtectedRoute requireAdmin={false}>
+                        <MainLayout>
+                          <PaymentManagement />
                         </MainLayout>
                       </ProtectedRoute>
                     } />

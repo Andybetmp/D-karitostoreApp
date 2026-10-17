@@ -154,7 +154,7 @@ const Footer = () => {
   return (
     <Section>
       <LogoContainer>
-        <img data-scroll data-scroll-speed="2" src={Logo} alt="Wibe Studio" />
+        <img data-scroll data-scroll-speed="2" src={Logo} alt="D'Karito Store Logo" />
         <h3 data-scroll data-scroll-speed="-1">
           D’KaritoStore
         </h3>
@@ -172,14 +172,14 @@ const Footer = () => {
           <li onClick={() => handleScroll(".about")}>Sobre nosotros</li>
           <li onClick={() => handleScroll("#shop")}>Tienda</li>
           <li onClick={() => handleScroll("#new-arrival")}>Recien llegados</li>
-          <li onClick={() => navigate('/login')}>Gestión</li>
+          <li onClick={handleGestion}>Gestión</li>
           <li>
-            <a href="https://google.com" target="_blank" rel="noreferrer">
+            <a href="https://github.com/Andybetmp/D-karitostoreApp" target="_blank" rel="noopener noreferrer">
               Instagram
             </a>
           </li>
           <li>
-            <a href="https://google.com" target="_blank" rel="noreferrer">
+            <a href="https://github.com/Andybetmp/D-karitostoreApp" target="_blank" rel="noopener noreferrer">
               Facebook
             </a>
           </li>
@@ -192,12 +192,12 @@ const Footer = () => {
           >
             &copy; {new Date().getFullYear()}. All Rights Reserved.
             &nbsp; | &nbsp;Teléfono: 976976975 &nbsp; | &nbsp;WhatsApp: 976976975 &nbsp;
-            by <a href="mailto:ventas@dkarito.com.pe" target="_blank" rel="noreferrer">
+            by <a href="mailto:ventas@dkarito.com.pe" target="_blank" rel="noopener noreferrer">
               D'Karito Store
             </a>
             &nbsp; | &nbsp;  Ventas: &nbsp;
             &nbsp;
-            <a href="mailto:ventas@dkarito.com.pe" target="_blank" rel="noreferrer">
+            <a href="mailto:ventas@dkarito.com.pe" target="_blank" rel="noopener noreferrer">
               ventas@dkarito.com.pe
             </a>
 
@@ -208,10 +208,7 @@ const Footer = () => {
             data-scroll-direction="horizontal"
           >
             Made with &hearts;  &nbsp;
-            <a
-              onClick={handleDeveloper}
-              style={{ cursor: 'pointer' }}
-            >
+            <a href="/login" onClick={(e) => { e.preventDefault(); handleDeveloper(); }} style={{ cursor: "pointer" }}>
               Developer
             </a>
           </span>

@@ -1,28 +1,23 @@
-import React, { Suspense } from "react";
+import React from "react";
 import styled from "styled-components";
-
-// import CoverVideo from '../components/CoverVideo';
-// import NavBar from '../components/NavBar';
-// import Logo from './../components/Logo';
-
-const CoverVideo = React.lazy(() => import("../CoverVideo"));
-const NavBar = React.lazy(() => import("../NavBar"));
-const Logo = React.lazy(() => import("../Logo"));
+import CoverVideo from "../CoverVideo";
+import NavBar from "../NavBar";
+import Logo from "../Logo";
 
 const Section = styled.section`
   position: relative;
   min-height: 100vh;
+  width: 100vw;
   overflow: hidden;
+  background-color: ${(props) => props.theme.body};
 `;
 
 const Home = () => {
   return (
     <Section id="home">
-      <Suspense fallback={<></>}>
-        <Logo />
-        <NavBar />
-        <CoverVideo />
-      </Suspense>
+      <Logo />
+      <NavBar />
+      <CoverVideo />
     </Section>
   );
 };

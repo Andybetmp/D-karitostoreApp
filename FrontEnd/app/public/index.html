@@ -1,43 +1,218 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es" class="dark">
   <head>
     <meta charset="utf-8" />
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
+    <meta name="theme-color" content="#12131a" />
+    <title>D'Karito Store — Marroquinería Peruana & E-Commerce Microservicios</title>
     <meta
       name="description"
-      content="Web site created using create-react-app"
+      content="D'Karito Store: Plataforma E-Commerce de marroquinería artesanal en cuero peruano con arquitectura de 6 microservicios en Java Spring Boot, API Gateway, PostgreSQL y React."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="D'Karito Store — E-Commerce Microservicios & Panel de Control ERP" />
+    <meta
+      property="og:description"
+      content="Tienda interactiva y panel administrativo ERP full-stack conectado a 6 microservicios (Auth, Product, Inventory, Order, Payment y API Gateway). Desarrollado por Jolaus Andy Meza Perez."
+    />
+    <meta property="og:image" content="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=1200" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="D'Karito Store — E-Commerce Microservicios" />
+    <meta
+      name="twitter:description"
+      content="E-Commerce de cuero artesanal con arquitectura de microservicios Java Spring Boot + React."
     />
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <!--
-      manifest.json provides metadata used when your web app is installed on a
-      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
-    -->
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
-
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
-    <title>Wibe Studio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: 'class',
+        corePlugins: {
+          preflight: false
+        },
+        theme: {
+          extend: {
+            colors: {
+              'secondary': '#d4d4d8',
+              'on-secondary-container': '#ffffff',
+              'inverse-on-surface': '#18181b',
+              'on-tertiary': '#064e3b',
+              'on-surface': '#ffffff',
+              'tertiary-fixed-dim': '#34d399',
+              'tertiary-container': '#10b981',
+              'primary': '#ffffff',
+              'surface-container-highest': 'rgba(255, 255, 255, 0.14)',
+              'surface-dim': '#0d0d0d',
+              'inverse-primary': '#27272a',
+              'surface': '#121212',
+              'on-primary-fixed': '#121212',
+              'on-background': '#ffffff',
+              'on-tertiary-container': '#022c22',
+              'on-primary': '#121212',
+              'on-error-container': '#fecaca',
+              'surface-bright': '#27272a',
+              'surface-container': 'rgba(255, 255, 255, 0.08)',
+              'on-surface-variant': '#a1a1aa',
+              'surface-tint': '#ffffff',
+              'on-secondary-fixed': '#18181b',
+              'tertiary': '#34d399',
+              'error': '#f87171',
+              'surface-container-high': 'rgba(255, 255, 255, 0.12)',
+              'primary-fixed-dim': '#e4e4e7',
+              'secondary-container': 'rgba(255, 255, 255, 0.1)',
+              'on-tertiary-fixed-variant': '#065f46',
+              'on-secondary-fixed-variant': '#3f3f46',
+              'on-primary-fixed-variant': '#27272a',
+              'secondary-fixed': '#f4f4f5',
+              'primary-container': 'rgba(255, 255, 255, 0.14)',
+              'primary-fixed': '#ffffff',
+              'on-tertiary-fixed': '#022c22',
+              'surface-container-low': 'rgba(255, 255, 255, 0.04)',
+              'on-primary-container': '#ffffff',
+              'tertiary-fixed': '#6ee7b7',
+              'surface-container-lowest': 'rgba(10, 10, 10, 0.75)',
+              'on-secondary': '#18181b',
+              'outline-variant': 'rgba(255, 255, 255, 0.12)',
+              'background': '#121212',
+              'inverse-surface': '#f4f4f5',
+              'surface-variant': '#27272a',
+              'secondary-fixed-dim': '#d4d4d8',
+              'on-error': '#450a0a',
+              'error-container': 'rgba(239, 68, 68, 0.2)',
+              'outline': '#71717a'
+            },
+            borderRadius: {
+              'DEFAULT': '0.125rem',
+              'lg': '0.25rem',
+              'xl': '0.5rem',
+              'full': '0.75rem'
+            },
+            spacing: {
+              'gutter': '1.5rem',
+              'space-sm': '0.5rem',
+              'space-md': '1rem',
+              'space-xs': '0.25rem',
+              'margin-mobile': '1rem',
+              'margin': '2rem',
+              'space-lg': '1.5rem',
+              'gutter-mobile': '0.75rem',
+              'space-xl': '2.5rem',
+              'space-gutter': '1.5rem'
+            },
+            fontFamily: {
+              'mono-data': ['JetBrains Mono', 'monospace'],
+              'headline-sm': ['Plus Jakarta Sans', 'sans-serif'],
+              'display-lg': ['Plus Jakarta Sans', 'sans-serif'],
+              'body-lg': ['Inter', 'sans-serif'],
+              'headline-xl': ['Plus Jakarta Sans', 'sans-serif'],
+              'body-md': ['Inter', 'sans-serif'],
+              'headline-md': ['Plus Jakarta Sans', 'sans-serif'],
+              'label-lg': ['Plus Jakarta Sans', 'sans-serif'],
+              'label-md': ['Inter', 'sans-serif'],
+              'display-lg-mobile': ['Plus Jakarta Sans', 'sans-serif'],
+              'body-sm': ['Inter', 'sans-serif'],
+              'headline-lg': ['Plus Jakarta Sans', 'sans-serif'],
+              'headline-xl-mobile': ['Plus Jakarta Sans', 'sans-serif'],
+              'label-caps': ['Plus Jakarta Sans', 'sans-serif']
+            },
+            fontSize: {
+              'mono-data': ['0.8125rem', { lineHeight: '1.4', letterSpacing: '-0.01em', fontWeight: '500' }],
+              'headline-sm': ['1.125rem', { lineHeight: '1.4', letterSpacing: '0', fontWeight: '600' }],
+              'display-lg': ['3rem', { lineHeight: '1.15', letterSpacing: '-0.025em', fontWeight: '700' }],
+              'body-lg': ['1rem', { lineHeight: '1.5', letterSpacing: '0', fontWeight: '400' }],
+              'headline-xl': ['2.25rem', { lineHeight: '1.2', letterSpacing: '-0.02em', fontWeight: '600' }],
+              'body-md': ['0.875rem', { lineHeight: '1.5', letterSpacing: '0', fontWeight: '400' }],
+              'headline-md': ['1.375rem', { lineHeight: '1.35', letterSpacing: '-0.01em', fontWeight: '600' }],
+              'label-lg': ['0.875rem', { lineHeight: '1.25', letterSpacing: '0.01em', fontWeight: '600' }],
+              'label-md': ['0.75rem', { lineHeight: '1.3', letterSpacing: '0.02em', fontWeight: '500' }],
+              'display-lg-mobile': ['2rem', { lineHeight: '1.2', letterSpacing: '-0.02em', fontWeight: '700' }],
+              'body-sm': ['0.75rem', { lineHeight: '1.45', letterSpacing: '0.01em', fontWeight: '400' }],
+              'headline-lg': ['1.75rem', { lineHeight: '1.3', letterSpacing: '-0.015em', fontWeight: '600' }],
+              'headline-xl-mobile': ['1.75rem', { lineHeight: '1.25', letterSpacing: '-0.015em', fontWeight: '600' }],
+              'label-caps': ['0.6875rem', { lineHeight: '1.2', letterSpacing: '0.08em', fontWeight: '700' }]
+            }
+          }
+        }
+      };
+    </script>
+    <style>
+      :where(.dk-erp-root), :where(.dk-erp-root) *, :where(.dk-erp-root) *::before, :where(.dk-erp-root) *::after {
+        box-sizing: border-box;
+        border-width: 0;
+        border-style: solid;
+        border-color: rgba(255, 255, 255, 0.1);
+      }
+      :where(.dk-erp-root) {
+        background-color: #121212;
+        color: #ffffff;
+        font-family: 'Inter', sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+      :where(.dk-erp-root) h1, :where(.dk-erp-root) h2, :where(.dk-erp-root) h3, :where(.dk-erp-root) h4, :where(.dk-erp-root) h5, :where(.dk-erp-root) h6, :where(.dk-erp-root) p {
+        margin: 0;
+      }
+      :where(.dk-erp-root) a {
+        color: inherit;
+        text-decoration: none;
+      }
+      :where(.dk-erp-root) button, :where(.dk-erp-root) input, :where(.dk-erp-root) select, :where(.dk-erp-root) textarea {
+        font-family: inherit;
+        color: inherit;
+        margin: 0;
+        background-color: transparent;
+      }
+      :where(.dk-erp-root) select option {
+        background-color: #18181b;
+        color: #ffffff;
+      }
+      :where(.dk-erp-root) button {
+        cursor: pointer;
+      }
+      :where(.dk-erp-root) table {
+        border-collapse: collapse;
+      }
+      /* Glassmorphism card treatment matching SignIn1 */
+      .dk-erp-root .bg-surface-container-low {
+        background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.07) 0%, rgba(18, 18, 18, 0.85) 100%);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.09);
+      }
+      .dk-erp-root .bg-surface-container {
+        border: 1px solid rgba(255, 255, 255, 0.08);
+      }
+      .dk-erp-root .bg-primary-container {
+        background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.1) 100%);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        backdrop-filter: blur(8px);
+      }
+      .dk-erp-root ::-webkit-scrollbar {
+        display: none;
+      }
+      .dk-erp-root .material-symbols-outlined {
+        font-family: 'Material Symbols Outlined';
+        font-weight: normal;
+        font-style: normal;
+        line-height: 1;
+        letter-spacing: normal;
+        text-transform: none;
+        display: inline-block;
+        white-space: nowrap;
+        word-wrap: normal;
+        direction: ltr;
+        -webkit-font-smoothing: antialiased;
+        user-select: none;
+      }
+    </style>
   </head>
   <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <noscript>Necesitas habilitar JavaScript para ejecutar D'Karito Store.</noscript>
     <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
-
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
-
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
   </body>
 </html>

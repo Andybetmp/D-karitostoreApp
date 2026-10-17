@@ -4,54 +4,52 @@ interface UserMenuItem {
   icon: string;
   color?: string;
   path?: string;
+  action?: string;
 }
 
 const userMenuItems: UserMenuItem[] = [
   {
     id: 1,
-    title: 'View Profile',
-    icon: 'mingcute:user-2-fill',
+    title: 'Panel Principal (Dashboard)',
+    icon: 'mingcute:home-1-fill',
     color: 'text.primary',
-    path: '/profile',
+    path: '/dashboard',
   },
   {
     id: 2,
-    title: 'Account Settings',
-    icon: 'material-symbols:settings-account-box-rounded',
+    title: 'Gestión de Productos y Stock',
+    icon: 'lets-icons:bag-alt-light',
     color: 'text.primary',
-    path: '/settings',
+    path: '/dashboard/products',
   },
   {
-    id: 11,
-    title: 'My Orders',
+    id: 3,
+    title: 'Gestión de Pagos y Órdenes',
+    icon: 'mdi:credit-card-check-outline',
+    color: 'text.primary',
+    path: '/dashboard/payments',
+  },
+  {
+    id: 4,
+    title: 'Mis Pedidos',
     icon: 'icon-park-solid:transaction-order',
     color: 'text.primary',
     path: '/my-orders',
   },
   {
-    id: 3,
-    title: 'Notifications',
-    icon: 'ion:notifications',
-    color: 'text.primary',
-  },
-  {
-    id: 4,
-    title: 'Switch Account',
-    icon: 'material-symbols:switch-account',
-    color: 'text.primary',
-  },
-  {
     id: 5,
-    title: 'Help Center',
-    icon: 'material-symbols:live-help',
+    title: 'Ir a la Tienda',
+    icon: 'mdi:storefront-outline',
     color: 'text.primary',
+    path: '/',
   },
   {
     id: 6,
-    title: 'Logout',
+    title: 'Cerrar Sesión',
     icon: 'material-symbols:logout',
     color: 'error.main',
-    path: '/',
+    path: '/login',
+    action: 'logout',
   },
 ];
 

@@ -11,35 +11,34 @@ const Customers = (): ReactElement => {
   }, []);
 
   return (
-    <Paper sx={{ p: { xs: 4, sm: 8 }, height: 1 }}>
+    <Paper sx={{ p: { xs: 4, sm: 6 }, height: 1 }}>
       <Stack
         direction="row"
         justifyContent="space-between"
         alignItems="center"
-        mb={5}
+        mb={4}
         flexWrap="wrap"
         gap={3}
       >
-        <Typography variant="h4" color="common.white">
-          Customers
-        </Typography>
+        <Box>
+          <Typography variant="h4" color="common.white">
+            Directorio de Clientes
+          </Typography>
+          <Typography variant="caption" color="text.secondary">
+            Compradores frecuentes y envíos nacionales
+          </Typography>
+        </Box>
         <TextField
           variant="filled"
-          placeholder="Search..."
+          placeholder="Buscar cliente o ciudad..."
           value={search}
           onChange={handleChange}
           sx={{
             '.MuiFilledInput-root': {
               bgcolor: 'grey.A100',
-              ':hover': {
-                bgcolor: 'background.default',
-              },
-              ':focus': {
-                bgcolor: 'background.default',
-              },
-              ':focus-within': {
-                bgcolor: 'background.default',
-              },
+              ':hover': { bgcolor: 'background.default' },
+              ':focus': { bgcolor: 'background.default' },
+              ':focus-within': { bgcolor: 'background.default' },
             },
             borderRadius: 2,
             height: 40,

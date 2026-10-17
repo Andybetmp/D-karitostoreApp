@@ -1,14 +1,10 @@
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
-import React, { useLayoutEffect } from "react";
+import React, { useLayoutEffect, useRef, useState, useEffect } from "react";
 import styled from "styled-components";
-import { useRef } from "react";
-
 import { motion } from "framer-motion";
 import { useCart } from "../../context/CartContext";
 import { productService, Product as ProductType } from "../../services/productService";
-import { useState, useEffect } from "react";
-
 
 const Section = styled.section`
   min-height: 100vh;
@@ -16,14 +12,13 @@ const Section = styled.section`
   width: 100vw;
   margin: 0 auto;
   overflow: hidden;
-
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
-
   position: relative;
 `;
-const Title = styled.h1`
+
+const Title = styled.h2`
   font-size: ${(props) => props.theme.fontxxxl};
   font-family: "Kaushan Script";
   font-weight: 300;
@@ -46,10 +41,8 @@ const Left = styled.div`
   width: 35%;
   background-color: ${(props) => props.theme.body};
   color: ${(props) => props.theme.text};
-
   min-height: 100vh;
   z-index: 5;
-
   position: fixed;
   left: 0;
   display: flex;
@@ -59,6 +52,7 @@ const Left = styled.div`
   p {
     font-size: ${(props) => props.theme.fontlg};
     font-weight: 300;
+    line-height: 1.6;
     width: 80%;
     margin: 0 auto;
   }
@@ -82,100 +76,124 @@ const Left = styled.div`
     }
   }
 `;
+
 const Right = styled.div`
   position: absolute;
   left: 35%;
-  padding-left: 30%;
+  padding-left: 18%;
+  padding-right: 10%;
   min-height: 100vh;
-
   background-color: ${(props) => props.theme.grey};
-  /* width: 65%; */
   display: flex;
   justify-content: flex-start;
   align-items: center;
-
-  h1 {
-    width: 5rem;
-    margin: 0 2rem;
-  }
 `;
 
 const Item = styled(motion.div)`
   width: 20rem;
-  margin-right: 6rem;
-
+  margin-right: 4.5rem;
+  background: rgba(0, 0, 0, 0.28);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 14px;
+  padding: 1.25rem;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
+  backdrop-filter: blur(6px);
+
   img {
     width: 100%;
-    height: auto;
+    height: 260px;
+    object-fit: cover;
+    border-radius: 10px;
     cursor: pointer;
+    margin-bottom: 1rem;
   }
-  h1 {
-    display: inline-block;
-    width: fit-content;
-    font-weight: 500;
+
+  h3 {
+    font-size: 1.15rem;
+    font-weight: 600;
     text-align: center;
-    cursor: pointer;
+    color: #fff;
+    margin: 0.25rem 0;
   }
 
   .price {
-    font-size: ${props => props.theme.fontlg};
-    font-weight: 600;
-    color: ${props => props.theme.text};
-    margin-top: 0.5rem;
+    font-size: ${(props) => props.theme.fontlg};
+    font-weight: 700;
+    color: #a9dfd8;
+    margin-top: 0.35rem;
   }
 
   @media (max-width: 48em) {
     width: 15rem;
+    margin-right: 2.5rem;
+    img {
+      height: 200px;
+    }
   }
 `;
 
-const AddToCartButton = styled.button`
+const AddToCartButton = styled.button<{ $added?: boolean }>`
   margin-top: 1rem;
-  padding: 0.5rem 1rem;
-  background-color: ${props => props.theme.text};
-  color: ${props => props.theme.body};
+  width: 100%;
+  padding: 0.65rem 1rem;
+  background-color: ${(props) => (props.$added ? "#28c76f" : props.theme.text)};
+  color: ${(props) => (props.$added ? "#fff" : props.theme.body)};
   border: none;
-  border-radius: 4px;
-  font-size: ${props => props.theme.fontsm};
-  font-weight: 600;
+  border-radius: 8px;
+  font-size: ${(props) => props.theme.fontsm};
+  font-weight: 700;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.25s ease;
 
   &:hover {
-    background-color: ${props => props.theme.grey};
+    opacity: 0.9;
+    transform: translateY(-1px);
   }
 `;
 
-const Product = ({ img, title = "", id, price }: { img: string; title: string; id: string; price: number }) => {
+const Product = ({
+  img,
+  title = "",
+  id,
+  price,
+}: {
+  img: string;
+  title: string;
+  id: string;
+  price: number;
+}) => {
   const { addToCart } = useCart();
+  const [added, setAdded] = useState(false);
 
   const handleAddToCart = () => {
     addToCart({ id, img, title, price });
+    setAdded(true);
+    setTimeout(() => setAdded(false), 1400);
   };
 
   return (
     <Item
-      initial={{ filter: "grayscale(100%)" }}
+      initial={{ filter: "grayscale(60%)" }}
       whileInView={{ filter: "grayscale(0%)" }}
-      transition={{ duration: 0.5 }}
-      viewport={{ once: false, amount: "all" }}
+      transition={{ duration: 0.45 }}
+      viewport={{ once: false, amount: 0.3 }}
     >
       <img
         src={img}
         alt={title}
+        loading="lazy"
         onError={(e) => {
-          e.currentTarget.src = 'https://placehold.co/600x400?text=No+Image';
-          e.currentTarget.onerror = null; // Prevent infinite loop
+          e.currentTarget.src = "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600";
+          e.currentTarget.onerror = null;
         }}
       />
-      <h1>{title}</h1>
-      <div className="price">${price}</div>
-      <AddToCartButton onClick={handleAddToCart}>
-        Agregar al carrito
+      <h3>{title}</h3>
+      <div className="price">${Number(price || 0).toFixed(2)}</div>
+      <AddToCartButton $added={added} onClick={handleAddToCart} aria-label={`Agregar ${title} al carrito`}>
+        {added ? "✓ Agregado al carrito" : "Agregar al carrito"}
       </AddToCartButton>
     </Item>
   );
@@ -184,29 +202,25 @@ const Product = ({ img, title = "", id, price }: { img: string; title: string; i
 const Shop = () => {
   gsap.registerPlugin(ScrollTrigger);
 
-  const ref = useRef(null);
-  const horizontalRef = useRef(null);
+  const ref = useRef<HTMLElement | null>(null);
+  const horizontalRef = useRef<HTMLDivElement | null>(null);
   const [products, setProducts] = useState<ProductType[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Fetch products from backend
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const response = await productService.getAllProducts();
-        // Handle paginated response - response.data contains {content: [], totalElements: ...}
-        const productData = response.data;
-        if (productData && typeof productData === 'object' && 'content' in productData) {
-          // Paginated response
+        const productData = response.data as any;
+        if (productData && typeof productData === "object" && "content" in productData) {
           setProducts(Array.isArray(productData.content) ? productData.content : []);
         } else if (Array.isArray(productData)) {
-          // Direct array response
           setProducts(productData);
         } else {
           setProducts([]);
         }
       } catch (error) {
-        console.error('Error loading products:', error);
+        console.error("Error loading products:", error);
         setProducts([]);
       } finally {
         setLoading(false);
@@ -216,51 +230,51 @@ const Shop = () => {
   }, []);
 
   useLayoutEffect(() => {
-    let element = ref.current;
-    let scrollingElement = horizontalRef.current;
+    const element = ref.current;
+    const scrollingElement = horizontalRef.current;
 
-    if (!element || !scrollingElement) return;
-
-    let pinWrapWidth = scrollingElement.offsetWidth;
+    if (!element || !scrollingElement || products.length === 0) return;
 
     let t1 = gsap.timeline();
 
-    setTimeout(() => {
+    const timer = setTimeout(() => {
+      if (!element.isConnected || !scrollingElement.isConnected) return;
+      const pinWrapWidth = scrollingElement.offsetWidth;
+      if (!pinWrapWidth) return;
+
       t1.to(element, {
         scrollTrigger: {
           trigger: element,
           start: "top top",
           end: pinWrapWidth,
-          scroller: ".App", // locomotive element
+          scroller: ".App",
           scrub: true,
           pin: true,
-          // markers:true,
         },
-        // we have to increase scrolling height of this section same as the scrolling element width
         height: `${scrollingElement.scrollWidth}px`,
-        ease: "none,",
+        ease: "none",
       });
 
-      // Horizontal Scrolling
       t1.to(scrollingElement, {
         scrollTrigger: {
           trigger: scrollingElement,
           start: "top top",
           end: pinWrapWidth,
-          scroller: ".App", // locomotive element
+          scroller: ".App",
           scrub: true,
-
-          // markers:true,
         },
-        // we have to increase scrolling height of this section same as the scrolling element width
         x: -pinWrapWidth,
-        ease: "none,",
+        ease: "none",
       });
       ScrollTrigger.refresh();
-    }, 1000);
+    }, 600);
 
-    // Cleanup is handled above in the main effect return
-  }, []);
+    return () => {
+      clearTimeout(timer);
+      t1.scrollTrigger?.kill();
+      t1.kill();
+    };
+  }, [products]);
 
   return (
     <Section ref={ref} id="shop">
@@ -283,9 +297,9 @@ const Shop = () => {
       </Left>
       <Right ref={horizontalRef}>
         {loading ? (
-          <h1>Cargando productos...</h1>
+          <h3 style={{ color: "#fff", margin: "0 2rem" }}>Cargando catálogo de cuero...</h3>
         ) : products.length === 0 ? (
-          <h1>No hay productos disponibles</h1>
+          <h3 style={{ color: "#fff", margin: "0 2rem" }}>No hay productos disponibles</h3>
         ) : (
           products.map((product) => (
             <Product

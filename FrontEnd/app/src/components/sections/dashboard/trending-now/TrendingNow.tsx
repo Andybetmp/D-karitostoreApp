@@ -9,53 +9,37 @@ import { trendingItems } from 'data/trending-items';
 
 const TrendingNow = (): ReactElement => {
   const [, setSwiperRef] = useState<SwiperClass>();
-
   const trendingItemsSlides = useMemo(() => trendingItems, []);
 
   return (
-    <Paper
-      sx={{
-        p: { xs: 4, sm: 8 },
-        height: 1,
-      }}
-    >
+    <Paper sx={{ p: { xs: 4, sm: 6 }, height: 1 }}>
       <Stack
         direction="row"
         justifyContent="space-between"
         alignItems="center"
-        mb={5}
+        mb={4}
         mr={-2}
         flexWrap="wrap"
       >
         <Typography variant="h4" color="common.white">
-          Trending Now
+          Tendencias en Marroquinería
         </Typography>
         <Stack direction="row" gap={1}>
           <IconButton
-            className={`prev-arrow`}
+            className="prev-arrow"
             sx={{
-              '&:disabled': {
-                opacity: 0.5,
-                cursor: 'default',
-              },
-              '&:hover': {
-                bgcolor: 'transparent',
-              },
+              '&:disabled': { opacity: 0.5, cursor: 'default' },
+              '&:hover': { bgcolor: 'transparent' },
             }}
             centerRipple
           >
             <IconifyIcon icon="mingcute:left-line" />
           </IconButton>
           <IconButton
-            className={`next-arrow`}
+            className="next-arrow"
             sx={{
-              '&:disabled': {
-                opacity: 0.5,
-                cursor: 'default',
-              },
-              '&:hover': {
-                bgcolor: 'transparent',
-              },
+              '&:disabled': { opacity: 0.5, cursor: 'default' },
+              '&:hover': { bgcolor: 'transparent' },
             }}
             centerRipple
           >
@@ -63,12 +47,7 @@ const TrendingNow = (): ReactElement => {
           </IconButton>
         </Stack>
       </Stack>
-      <ReactSwiper
-        onSwiper={setSwiperRef}
-        sx={{
-          height: 1,
-        }}
-      >
+      <ReactSwiper onSwiper={setSwiperRef} sx={{ height: 1 }}>
         {trendingItemsSlides.map((slideItem) => (
           <SwiperSlide key={slideItem.id}>
             <SlideItem trendingItem={slideItem} />

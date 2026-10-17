@@ -1,12 +1,14 @@
-import { Menu, Avatar, Button, Tooltip, MenuItem, ListItemIcon, ListItemText } from '@mui/material';
+import { Menu, Avatar, Button, Tooltip, MenuItem, ListItemIcon, ListItemText, Typography, Box } from '@mui/material';
 import IconifyIcon from 'components/base/IconifyIcon';
 import profile from 'assets/Images/account/Profile.png';
 import { useState, MouseEvent, useCallback, ReactElement } from 'react';
 import { useNavigate } from 'react-router-dom';
 import userMenuItems from 'data/usermenu-items';
+import { useAuth } from 'context/AuthContext';
 
 const UserDropdown = (): ReactElement => {
   const navigate = useNavigate();
+  const { user, logout } = useAuth();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const menuOpen = Boolean(anchorEl);
 
@@ -18,12 +20,15 @@ const UserDropdown = (): ReactElement => {
     setAnchorEl(null);
   }, []);
 
-  const handleMenuItemClick = useCallback((path?: string) => {
+  const handleMenuItemClick = useCallback((path?: string, action?: string) => {
     handleUserClose();
+    if (action === 'logout') {
+      logout();
+    }
     if (path) {
       navigate(path);
     }
-  }, [navigate]);
+  }, [navigate, handleUserClose, logout]);
 
   return (
     <>
@@ -38,24 +43,32 @@ const UserDropdown = (): ReactElement => {
         disableRipple
         sx={{
           borderRadius: 2,
-          gap: 3.75,
-          px: { xs: 0, sm: 0.625 },
+          gap: 1.5,
+          px: { xs: 0, sm: 1 },
           py: 0.625,
           '&:hover': {
             bgcolor: 'transparent',
           },
         }}
       >
-        <Tooltip title="Nickelfox" arrow placement="bottom">
-          <Avatar src={profile} sx={{ width: 44, height: 44 }} />
+        <Tooltip title={user?.name || "Admin D'Karito"} arrow placement="bottom">
+          <Avatar src={user?.picture || profile} sx={{ width: 40, height: 40 }} />
         </Tooltip>
+        <Box sx={{ display: { xs: 'none', md: 'block' }, textAlign: 'left' }}>
+          <Typography variant="subtitle2" color="common.white" lineHeight={1.2}>
+            {user?.name || "Admin D'Karito"}
+          </Typography>
+          <Typography variant="caption" color="primary.main">
+            {user?.roles?.includes('ADMIN') ? 'Administrador' : 'Cliente'}
+          </Typography>
+        </Box>
         <IconifyIcon
           color="common.white"
           icon="mingcute:down-fill"
-          width={22.5}
-          height={22.5}
+          width={20}
+          height={20}
           sx={(theme) => ({
-            transform: menuOpen ? `rotate(180deg)` : `rotate(0deg)`,
+            transform: menuOpen ? 'rotate(180deg)' : 'rotate(0deg)',
             transition: theme.transitions.create('all', {
               easing: theme.transitions.easing.sharp,
               duration: theme.transitions.duration.short,
@@ -75,14 +88,15 @@ const UserDropdown = (): ReactElement => {
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
         {userMenuItems.map((userMenuItem) => (
-          <MenuItem key={userMenuItem.id} onClick={() => handleMenuItemClick(userMenuItem.path)}>
+          <MenuItem key={userMenuItem.id} onClick={() => handleMenuItemClick(userMenuItem.path, userMenuItem.action)}>
             <ListItemIcon
               sx={{
-                minWidth: `0 !important`,
+                minWidth: '0 !important',
                 color: userMenuItem.color,
-                width: 14,
-                height: 10,
+                width: 16,
+                height: 12,
                 mb: 1.5,
+                mr: 1.5,
               }}
             >
               <IconifyIcon icon={userMenuItem.icon} color={userMenuItem.color} />

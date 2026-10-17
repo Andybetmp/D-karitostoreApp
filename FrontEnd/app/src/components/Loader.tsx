@@ -3,30 +3,25 @@ import styled from "styled-components";
 import { motion } from "framer-motion";
 
 const Container = styled(motion.div)`
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-
   touch-action: none;
   overflow: hidden;
-
   width: 100vw;
   height: 100vh;
-
-  z-index: 6;
-
+  z-index: 999;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
   background-color: ${(props) => props.theme.body};
   color: ${(props) => props.theme.text};
 
   svg {
-    width: 10vw;
+    width: 8rem;
     height: auto;
     overflow: visible;
     stroke-linejoin: round;
@@ -35,21 +30,23 @@ const Container = styled(motion.div)`
     g {
       path {
         stroke: ${(props) => props.theme.text};
+        stroke-width: 1.2;
       }
     }
   }
 
   @media (max-width: 48em) {
     svg {
-      width: 20vw;
+      width: 6rem;
     }
   }
 `;
 
 const Text = styled(motion.span)`
   font-size: ${(props) => props.theme.fontxl};
+  font-family: "Kaushan Script";
   color: ${(props) => props.theme.text};
-  padding-top: 0.5rem;
+  padding-top: 0.75rem;
 
   @media (max-width: 48em) {
     font-size: ${(props) => props.theme.fontlg};
@@ -62,10 +59,10 @@ const textVariants = {
   },
   visible: {
     opacity: 1,
-
     transition: {
-      duration: 1,
-      yoyo: Infinity, // repeats infinite times
+      duration: 0.8,
+      repeat: Infinity,
+      repeatType: "reverse" as const,
       ease: "easeInOut",
     },
   },
@@ -79,9 +76,8 @@ const pathVariants = {
   visible: {
     opacity: 1,
     pathLength: 1,
-
     transition: {
-      duration: 2,
+      duration: 1.8,
       ease: "easeInOut",
     },
   },
@@ -90,17 +86,9 @@ const pathVariants = {
 const Loader = () => {
   return (
     <Container
-      initial={{
-        y: 0,
-        opacity: 1,
-      }}
-      exit={{
-        y: "100%",
-        opacity: 0,
-      }}
-      transition={{
-        duration: 2,
-      }}
+      initial={{ y: 0, opacity: 1 }}
+      exit={{ y: "-100%", opacity: 0 }}
+      transition={{ duration: 0.8, ease: "easeInOut" }}
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -110,7 +98,6 @@ const Loader = () => {
         width="48px"
         fill="none"
       >
-        <g></g>
         <g>
           <motion.path
             variants={pathVariants}

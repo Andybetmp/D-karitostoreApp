@@ -4,7 +4,6 @@ import { ReactElement } from 'react';
 
 const Footer = ({ open }: { open: boolean }): ReactElement => {
   const { down } = useBreakpoints();
-
   const isMobileScreen = down('sm');
 
   return (
@@ -18,12 +17,20 @@ const Footer = ({ open }: { open: boolean }): ReactElement => {
       pl={{ xs: 3, sm: 5.25 }}
     >
       <Typography variant="subtitle1" sx={{ textAlign: { xs: 'center', sm: 'right' } }}>
-        {' '}
+        Desarrollado con{' '}
         <Box component="span" sx={{ color: 'error.main', verticalAlign: 'middle' }}>
           &#10084;
         </Box>{' '}
-        by{' '}
-
+        por{' '}
+        <Link
+          href="https://github.com/Andybetmp/D-karitostoreApp"
+          target="_blank"
+          rel="noopener noreferrer"
+          color="primary.main"
+          underline="hover"
+        >
+          Jolaus Andy Meza Perez — D&apos;Karito Store
+        </Link>
       </Typography>
     </Stack>
   );

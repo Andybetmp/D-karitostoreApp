@@ -1,10 +1,13 @@
-import { Link, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import { ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import IconifyIcon from 'components/base/IconifyIcon';
 import { NavItem as NavItemProps } from 'data/nav-items';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const NavItem = ({ navItem, open }: { navItem: NavItemProps; open: boolean }) => {
   const { pathname } = useLocation();
+  const navigate = useNavigate();
+  const isSelected = pathname === navItem.path;
+
   return (
     <ListItem
       disablePadding
@@ -12,28 +15,30 @@ const NavItem = ({ navItem, open }: { navItem: NavItemProps; open: boolean }) =>
         display: 'block',
         px: 5,
         borderRight: !open
-          ? pathname === navItem.path
+          ? isSelected
             ? `3px solid ${theme.palette.primary.main}`
-            : `3px solid transparent`
+            : '3px solid transparent'
           : '',
       })}
     >
       <ListItemButton
-        LinkComponent={Link}
-        href={navItem.path}
+        onClick={() => {
+          if (navItem.path && navItem.path !== '#!') {
+            navigate(navItem.path);
+          }
+        }}
         sx={{
-          opacity: navItem.active ? 1 : 0.5,
-          bgcolor: pathname === navItem.path ? (open ? 'primary.main' : '') : 'background.default',
+          opacity: navItem.active ? 1 : 0.6,
+          bgcolor: isSelected ? (open ? 'primary.main' : '') : 'background.default',
           '&:hover': {
-            bgcolor:
-              pathname === navItem.path
-                ? open
-                  ? 'primary.dark'
-                  : 'background.paper'
-                : 'background.paper',
+            bgcolor: isSelected
+              ? open
+                ? 'primary.dark'
+                : 'background.paper'
+              : 'background.paper',
           },
           '& .MuiTouchRipple-root': {
-            color: pathname === navItem.path ? 'primary.main' : 'text.disabled',
+            color: isSelected ? 'primary.main' : 'text.disabled',
           },
         }}
       >
@@ -42,12 +47,11 @@ const NavItem = ({ navItem, open }: { navItem: NavItemProps; open: boolean }) =>
             width: 20,
             height: 20,
             mr: open ? 'auto' : 0,
-            color:
-              pathname === navItem.path
-                ? open
-                  ? 'background.default'
-                  : 'primary.main'
-                : 'text.primary',
+            color: isSelected
+              ? open
+                ? 'background.default'
+                : 'primary.main'
+              : 'text.primary',
           }}
         >
           <IconifyIcon icon={navItem.icon} width={1} height={1} />
@@ -57,7 +61,7 @@ const NavItem = ({ navItem, open }: { navItem: NavItemProps; open: boolean }) =>
           sx={{
             display: open ? 'inline-block' : 'none',
             opacity: open ? 1 : 0,
-            color: pathname === navItem.path ? 'background.default' : '',
+            color: isSelected ? 'background.default' : '',
           }}
         />
       </ListItemButton>

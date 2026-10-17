@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useMemo, useEffect, ReactElement } from 'react';
 import { Stack, Avatar, Tooltip, Typography, CircularProgress } from '@mui/material';
 import {
@@ -5,13 +6,11 @@ import {
   DataGrid,
   GridColDef,
   useGridApiRef,
-  GridActionsCellItem,
   GridRenderCellParams,
   GridTreeNodeWithRender,
 } from '@mui/x-data-grid';
 import { rows } from 'data/customer-data';
 import { stringAvatar } from 'helpers/string-avatar';
-import IconifyIcon from 'components/base/IconifyIcon';
 import { currencyFormat } from 'helpers/format-functions';
 import CustomPagination from 'components/common/CustomPagination';
 import CustomNoResultsOverlay from 'components/common/CustomNoResultsOverlay';
@@ -25,98 +24,55 @@ const columns: GridColDef<any>[] = [
   },
   {
     field: 'name',
-    headerName: 'Name',
-    valueGetter: (params: any) => {
-      return params;
-    },
-    renderCell: (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => {
-      return (
-        <Stack direction="row" gap={1} alignItems="center">
-          <Tooltip title={params.row.name} placement="top" arrow>
-            <Avatar {...stringAvatar(params.row.name)} />
-          </Tooltip>
-          <Typography variant="body2">{params.row.name}</Typography>
-        </Stack>
-      );
-    },
+    headerName: 'Cliente',
+    valueGetter: (params: any) => params,
+    renderCell: (params: GridRenderCellParams<any, any, any, GridTreeNodeWithRender>) => (
+      <Stack direction="row" gap={1} alignItems="center">
+        <Tooltip title={params.row.name} placement="top" arrow>
+          <Avatar {...stringAvatar(params.row.name)} />
+        </Tooltip>
+        <Typography variant="body2">{params.row.name}</Typography>
+      </Stack>
+    ),
     resizable: false,
     flex: 1,
     minWidth: 155,
   },
   {
     field: 'email',
-    headerName: 'Email',
+    headerName: 'Correo',
     resizable: false,
-    flex: 0.5,
-    minWidth: 145,
+    flex: 0.7,
+    minWidth: 160,
   },
   {
     field: 'phone',
-    headerName: 'Phone',
+    headerName: 'Teléfono',
     resizable: false,
-    flex: 1,
-    minWidth: 115,
+    flex: 0.8,
+    minWidth: 130,
   },
   {
     field: 'billing-address',
-    headerName: 'Billing Address',
+    headerName: 'Dirección de Envío',
     sortable: false,
     resizable: false,
-    flex: 1,
-    minWidth: 250,
+    flex: 1.2,
+    minWidth: 240,
   },
   {
     field: 'total-spent',
-    headerName: 'Total Spent',
+    headerName: 'Total Comprado',
     resizable: false,
     sortable: false,
     align: 'right',
     headerAlign: 'right',
-    flex: 1,
-    minWidth: 80,
-    valueFormatter: (value) => {
-      return currencyFormat(Number(value), { minimumFractionDigits: 2 });
-    },
-  },
-  {
-    field: 'actions',
-    type: 'actions',
-    headerName: 'Actions',
-    resizable: false,
-    flex: 1,
-    minWidth: 80,
-    getActions: () => {
-      return [
-        <Tooltip title="Edit">
-          <GridActionsCellItem
-            icon={
-              <IconifyIcon
-                icon="fluent:edit-32-filled"
-                color="text.secondary"
-                sx={{ fontSize: 'body1.fontSize', pointerEvents: 'none' }}
-              />
-            }
-            label="Edit"
-            size="small"
-          />
-        </Tooltip>,
-        <Tooltip title="Delete">
-          <GridActionsCellItem
-            icon={
-              <IconifyIcon
-                icon="mingcute:delete-3-fill"
-                color="error.main"
-                sx={{ fontSize: 'body1.fontSize', pointerEvents: 'none' }}
-              />
-            }
-            label="Delete"
-            size="small"
-          />
-        </Tooltip>,
-      ];
-    },
+    flex: 0.8,
+    minWidth: 110,
+    valueFormatter: (value) => currencyFormat(Number(value), { minimumFractionDigits: 2 }),
   },
 ];
+
 const CustomerTable = ({ searchText }: { searchText: string }): ReactElement => {
   const apiRef = useGridApiRef<GridApi>();
 
@@ -144,43 +100,33 @@ const CustomerTable = ({ searchText }: { searchText: string }): ReactElement => 
   }, [apiRef]);
 
   return (
-    <>
-      <DataGrid
-        apiRef={apiRef}
-        density="standard"
-        columns={visibleColumns}
-        autoHeight={false}
-        rowHeight={56}
-        checkboxSelection
-        disableColumnMenu
-        disableRowSelectionOnClick
-        rows={rows}
-        onResize={() => {
-          // Note: autosizeColumns may not be available in this version of MUI DataGrid
-          // apiRef.current.autosizeColumns({
-          //   includeOutliers: true,
-          //   expand: true,
-          // });
-        }}
-        initialState={{
-          pagination: { paginationModel: { page: 0, pageSize: 4 } },
-        }}
-        slots={{
-          loadingOverlay: CircularProgress,
-          pagination: CustomPagination,
-          noResultsOverlay: CustomNoResultsOverlay,
-        }}
-        slotProps={{
-          pagination: { labelRowsPerPage: rows.length },
-        }}
-        sx={{
-          height: 1,
-          width: 1,
-          tableLayout: 'fixed',
-          scrollbarWidth: 'thin',
-        }}
-      />
-    </>
+    <DataGrid
+      apiRef={apiRef}
+      density="standard"
+      columns={visibleColumns}
+      autoHeight={false}
+      rowHeight={56}
+      disableColumnMenu
+      disableRowSelectionOnClick
+      rows={rows}
+      initialState={{
+        pagination: { paginationModel: { page: 0, pageSize: 4 } },
+      }}
+      slots={{
+        loadingOverlay: CircularProgress,
+        pagination: CustomPagination,
+        noResultsOverlay: CustomNoResultsOverlay,
+      }}
+      slotProps={{
+        pagination: { labelRowsPerPage: rows.length },
+      }}
+      sx={{
+        height: 1,
+        width: 1,
+        tableLayout: 'fixed',
+        scrollbarWidth: 'thin',
+      }}
+    />
   );
 };
 

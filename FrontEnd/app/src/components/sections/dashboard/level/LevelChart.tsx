@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { alpha, SxProps, useTheme } from '@mui/material';
 import ReactEChart from 'components/base/ReactEChart';
 import { BarSeriesOption } from 'echarts';

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { ReactElement, useMemo } from 'react';
 import * as echarts from 'echarts';
 import { LineSeriesOption } from 'echarts';

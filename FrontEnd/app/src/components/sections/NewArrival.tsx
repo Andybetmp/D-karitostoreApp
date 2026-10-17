@@ -125,7 +125,7 @@ const Item = styled.div`
 const Product = ({ img, title = "" }) => {
   return (
     <Item>
-      <img src={img} alt={title} />
+      <img src={img} alt={title} loading="lazy" />
       <h2>{title}</h2>
     </Item>
   );
@@ -153,7 +153,7 @@ const NewArrival = () => {
     const timer = setTimeout(() => {
       try {
         // Verify elements still exist
-        if (!element || !scrollingElement) return;
+        if (!element || !scrollingElement || !element.isConnected || !scrollingElement.isConnected) return;
 
         t1.to(element, {
           scrollTrigger: {
@@ -166,7 +166,7 @@ const NewArrival = () => {
             //   markers:true,
           },
           // we have to increase scrolling height of this section same as the scrolling element width
-          ease: "none,",
+          ease: "none",
         });
 
         // Verticle Scrolling
@@ -199,7 +199,10 @@ const NewArrival = () => {
     return () => {
       clearTimeout(timer);
       // Let's clear instances
-      if (t1) t1.kill();
+      if (t1) {
+        t1.scrollTrigger?.kill();
+        t1.kill();
+      }
       // ScrollTrigger.getAll().forEach(trigger => trigger.kill());
     };
   }, []);
@@ -216,10 +219,10 @@ const NewArrival = () => {
       </Title>
 
       <Container ref={ScrollingRef}>
-        <Product img={img1} title="Denim" />
-        <Product img={img2} title="Cool Dresses" />
-        <Product img={img3} title="Jackets" />
-        <Product img={img4} title="T-shirts" />
+        <Product img={img1} title="Colección Ejecutiva" />
+        <Product img={img2} title="Bolsos Artesanales" />
+        <Product img={img3} title="Casacas de Cuero" />
+        <Product img={img4} title="Accesorios Premium" />
       </Container>
 
       <Text data-scroll data-scroll-speed="-4">

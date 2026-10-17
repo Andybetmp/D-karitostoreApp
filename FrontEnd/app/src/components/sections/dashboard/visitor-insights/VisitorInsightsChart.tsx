@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { SxProps, useTheme } from '@mui/material';
 import ReactEChart from 'components/base/ReactEChart';
 import * as echarts from 'echarts/core';

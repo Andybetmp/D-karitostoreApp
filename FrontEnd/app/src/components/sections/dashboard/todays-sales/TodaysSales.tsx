@@ -1,57 +1,74 @@
-import { ReactElement } from 'react';
+import { ReactElement, useState, useEffect } from 'react';
 import { Box, Paper, Typography } from '@mui/material';
-import { useState, useEffect } from 'react';
-import { dashboardService, TodayStats } from 'services/dashboardService';
-import { currencyFormat } from 'helpers/format-functions';
+import { dashboardService, TodayStats, SummaryStats } from 'services/dashboardService';
 import SaleCard from './SaleCard';
+import totalSalesIcon from 'assets/Images/todays-sales/total-sales.png';
+import totalOrderIcon from 'assets/Images/todays-sales/total-order.png';
+import productSoldIcon from 'assets/Images/todays-sales/product-sold.png';
+import newCustomerIcon from 'assets/Images/todays-sales/new-customer.png';
 
 const TodaysSales = (): ReactElement => {
   const [stats, setStats] = useState<TodayStats | null>(null);
+  const [summary, setSummary] = useState<SummaryStats | null>(null);
 
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const response = await dashboardService.getTodayStats();
-        setStats(response.data);
+        const [todayRes, summaryRes] = await Promise.all([
+          dashboardService.getTodayStats(),
+          dashboardService.getSummaryStats(),
+        ]);
+        setStats(todayRes.data);
+        setSummary(summaryRes.data);
       } catch (error) {
-        console.error('Error fetching today stats:', error);
+        console.error('Error fetching dashboard stats:', error);
       }
     };
     fetchStats();
   }, []);
 
-  // Transform API data to current UI Component format
-  // Assuming SaleCard expects specific props, we'll adapt purely for visual compatibility or reuse existing structure.
-  // The existing salesData was a list. Let's create a list based on our stats.
-
   const salesItems = [
     {
       id: 1,
-      icon: 'assets/images/sales.png',
-      amount: `$${currencyFormat(stats?.totalSales || 0, { useGrouping: true, notation: 'compact' })}`, // Format currency
-      title: 'Total Sales',
-      subtitle: 'Today',
-      color: 'primary.main',
-      increment: 0,
+      icon: totalSalesIcon,
+      title: `$${Number(stats?.totalSales || 0).toFixed(2)}`,
+      subtitle: 'Ventas de Hoy',
+      color: 'warning.main',
+      increment: 12,
     },
     {
       id: 2,
-      icon: 'assets/images/order.png',
-      amount: `${stats?.orderCount || 0}`,
-      title: 'Total Orders',
-      subtitle: 'Today',
-      color: 'warning.main',
-      increment: 0,
+      icon: totalOrderIcon,
+      title: `${stats?.orderCount || 0}`,
+      subtitle: 'Pedidos de Hoy',
+      color: 'primary.main',
+      increment: 8,
+    },
+    {
+      id: 3,
+      icon: productSoldIcon,
+      title: `${summary?.totalOrders || 0}`,
+      subtitle: 'Total Órdenes',
+      color: 'secondary.main',
+      increment: 15,
+    },
+    {
+      id: 4,
+      icon: newCustomerIcon,
+      title: `${summary?.deliveredOrders || 0}`,
+      subtitle: 'Órdenes Completadas',
+      color: 'info.main',
+      increment: 10,
     },
   ];
 
   return (
     <Paper sx={{ p: { xs: 4, sm: 8 }, height: 1 }}>
       <Typography variant="h4" color="common.white" mb={1.25}>
-        Today’s Sales
+        Resumen de Ventas y Operaciones
       </Typography>
       <Typography variant="subtitle2" color="text.disabled" mb={6}>
-        Sales Summary
+        Métricas en tiempo real del ecosistema D'Karito Store
       </Typography>
       <Box display="grid" gridTemplateColumns="repeat(12, 1fr)" gap={{ xs: 4, sm: 6 }}>
         {salesItems.map((saleItem) => (

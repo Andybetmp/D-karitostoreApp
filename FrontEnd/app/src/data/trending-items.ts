@@ -1,8 +1,3 @@
-import homeDecorRange from 'assets/Images/trending-now/home-decor-range.jpg';
-import disneyPrincessDress from 'assets/Images/trending-now/disney-princess-dresses.jpg';
-import bathroomEssentials from 'assets/Images/trending-now/bathroom-essentials.jpg';
-import appleSmartwatch from 'assets/Images/trending-now/apple-smartwatch.jpg';
-
 export interface TrendingItem {
   id?: number;
   name: string;
@@ -14,38 +9,30 @@ export interface TrendingItem {
 export const trendingItems: TrendingItem[] = [
   {
     id: 1,
-    name: 'Home Decor Range',
-    imgsrc: homeDecorRange,
-    popularity: 78,
-    users: ['Alex Xavier', 'Brian Edwards', 'George Oliver', 'Isaac Neville', 'Ulysses Parker'],
+    name: 'Bolso de Cuero Artesanal Arequipa',
+    imgsrc: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600',
+    popularity: 88,
+    users: ['Valeria Paredes', 'Carlos Mendoza', 'Lucía Quispe', 'Rodrigo Vargas', 'Andrea Salas'],
   },
   {
     id: 2,
-    name: 'Disney Princess Dress',
-    imgsrc: disneyPrincessDress,
-    popularity: 62,
-    users: ['David Olsen', 'Henry Irwin', 'Nathan Owens'],
+    name: 'Mochila Ejecutiva de Cuero Genuino',
+    imgsrc: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=600',
+    popularity: 79,
+    users: ['Jolaus Meza', 'Diego Cornejo', 'Fernanda Cáceres', 'Martín Delgado'],
   },
   {
     id: 3,
-    name: 'Bathroom Essentials',
-    imgsrc: bathroomEssentials,
-    popularity: 51,
-    users: [
-      'William Edwards',
-      'Alex Xavier',
-      'Michael Evans',
-      'Brian Edwards',
-      'George Oliver',
-      'Isaac Neville',
-      'Nathan Owens',
-    ],
+    name: 'Billetera Clásica Piel Vacuna',
+    imgsrc: 'https://images.unsplash.com/photo-1627123424574-724758594e93?w=600',
+    popularity: 71,
+    users: ['Sebastián Rojas', 'Camila Flores', 'Jorge Chávez', 'Paola Medina', 'Luis Zeballos'],
   },
   {
     id: 4,
-    name: 'Apple Smartwatch',
-    imgsrc: appleSmartwatch,
-    popularity: 29,
-    users: ['Ulysses Parker', 'David Olsen'],
+    name: 'Cinturón Hebilla Dorada Premium',
+    imgsrc: 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=600',
+    popularity: 64,
+    users: ['Gabriela Benavides', 'Renzo Polar', 'Mariana Núñez'],
   },
 ];

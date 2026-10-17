@@ -1,5 +1,4 @@
 import apiClient from './api';
-import { CartItem } from '../types';
 
 export interface OrderItemRequest {
     productId: number;
@@ -9,22 +8,29 @@ export interface OrderItemRequest {
 }
 
 export interface CreateOrderRequest {
-    userId: number; // In a real app this comes from token, but backend might expect it
+    userId: number;
     shippingAddress: string;
     items: OrderItemRequest[];
     totalAmount: number;
 }
 
+export interface OrderItemResponse {
+    id: number;
+    productId?: number;
+    productTitle: string;
+    price: number;
+    quantity: number;
+}
+
 export interface OrderResponse {
     id: number;
+    userId?: number;
     status: string;
     totalAmount: number;
-    items: {
-        id: number;
-        productTitle: string;
-        price: number;
-        quantity: number;
-    }[];
+    shippingAddress?: string;
+    createdAt?: string;
+    orderItems?: OrderItemResponse[];
+    items?: OrderItemResponse[];
 }
 
 export const orderService = {
@@ -33,4 +39,10 @@ export const orderService = {
 
     getOrdersByUser: (userId: number) =>
         apiClient.get<OrderResponse[]>(`/orders/user/${userId}`),
+
+    getAllOrders: () =>
+        apiClient.get<OrderResponse[]>('/orders'),
+
+    updateOrderStatus: (orderId: number, status: string) =>
+        apiClient.put<OrderResponse>(`/orders/${orderId}/status?status=${status}`),
 };

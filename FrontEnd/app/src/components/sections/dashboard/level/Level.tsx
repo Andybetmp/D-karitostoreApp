@@ -21,9 +21,12 @@ const Level = (): ReactElement => {
   }, [chartRef]);
 
   return (
-    <Paper sx={{ p: { xs: 4, sm: 8 }, height: 1 }}>
-      <Typography variant="h4" color="common.white">
-        Level
+    <Paper sx={{ p: { xs: 4, sm: 6 }, height: 1 }}>
+      <Typography variant="h4" color="common.white" gutterBottom>
+        Rotación de Stock
+      </Typography>
+      <Typography variant="caption" color="text.secondary" display="block" mb={1}>
+        Almacén Arequipa vs Despachos
       </Typography>
       <LevelChart
         chartRef={chartRef}
@@ -49,31 +52,19 @@ const Level = (): ReactElement => {
             justifyContent: 'flex-start',
             p: 0.5,
             borderRadius: 1,
-            gap: 2.5,
+            gap: 1.5,
             color: 'text.disabled',
             fontSize: 'body2.fontSize',
             alignItems: 'baseline',
-            '&:hover': {
-              bgcolor: 'transparent',
-            },
-            '& .MuiButton-startIcon': {
-              mx: 0,
-            },
+            '&:hover': { bgcolor: 'transparent' },
+            '& .MuiButton-startIcon': { mx: 0 },
           }}
           disableRipple
           startIcon={
-            <Box
-              sx={{
-                width: 8,
-                height: 8,
-                mb: 1,
-                bgcolor: 'primary.main',
-                borderRadius: 400,
-              }}
-            />
+            <Box sx={{ width: 8, height: 8, mb: 1, bgcolor: 'primary.main', borderRadius: 400 }} />
           }
         >
-          Volume
+          Stock Disponible
         </Button>
         <Button
           variant="text"
@@ -81,31 +72,19 @@ const Level = (): ReactElement => {
             justifyContent: 'flex-start',
             p: 0.5,
             borderRadius: 1,
-            gap: 2.5,
+            gap: 1.5,
             color: 'text.disabled',
             fontSize: 'body2.fontSize',
             alignItems: 'baseline',
-            '&:hover': {
-              bgcolor: 'transparent',
-            },
-            '& .MuiButton-startIcon': {
-              mx: 0,
-            },
+            '&:hover': { bgcolor: 'transparent' },
+            '& .MuiButton-startIcon': { mx: 0 },
           }}
           disableRipple
           startIcon={
-            <Box
-              sx={{
-                width: 8,
-                height: 8,
-                mb: 1,
-                bgcolor: 'grey.800',
-                borderRadius: 400,
-              }}
-            />
+            <Box sx={{ width: 8, height: 8, mb: 1, bgcolor: 'grey.800', borderRadius: 400 }} />
           }
         >
-          Service
+          Despachados
         </Button>
       </Stack>
     </Paper>

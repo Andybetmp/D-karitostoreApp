@@ -20,35 +20,33 @@ const VisitorInsights = (): ReactElement => {
   }, [chartRef]);
 
   return (
-    <Paper sx={{ p: { xs: 4, sm: 8 }, height: 1 }}>
+    <Paper sx={{ p: { xs: 4, sm: 6 }, height: 1 }}>
       <Stack
         direction="row"
         justifyContent="space-between"
         alignItems="center"
         flexWrap="wrap"
         gap={2}
-        mb={6}
+        mb={4}
       >
-        <Typography variant="h4" color="common.white">
-          Visitor Insights
-        </Typography>
+        <Box>
+          <Typography variant="h4" color="common.white">
+            Analítica de Clientes y Tráfico
+          </Typography>
+          <Typography variant="caption" color="text.secondary">
+            Visitas mensuales a la tienda online D&apos;Karito Store
+          </Typography>
+        </Box>
         <Button
           variant="text"
           disableRipple
           startIcon={
-            <Box
-              sx={{
-                width: 5,
-                height: 5,
-                bgcolor: 'warning.main',
-                borderRadius: 400,
-              }}
-            />
+            <Box sx={{ width: 6, height: 6, bgcolor: 'warning.main', borderRadius: 400 }} />
           }
           sx={{
             justifyContent: 'flex-start',
-            px: 4,
-            py: 2,
+            px: 3,
+            py: 1.5,
             borderRadius: 1,
             alignItems: 'center',
             fontSize: 'body2.fontSize',
@@ -56,15 +54,11 @@ const VisitorInsights = (): ReactElement => {
             color: 'text.disabled',
             bgcolor: 'background.default',
             cursor: 'default',
-            '&:hover': {
-              bgcolor: 'background.default',
-            },
-            '& .MuiButton-startIcon': {
-              mx: 0,
-            },
+            '&:hover': { bgcolor: 'background.default' },
+            '& .MuiButton-startIcon': { mx: 0 },
           }}
         >
-          New Visitors
+          Nuevos Compradores
         </Button>
       </Stack>
       <VisitorInsightsChart

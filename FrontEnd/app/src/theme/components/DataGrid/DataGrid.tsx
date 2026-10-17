@@ -100,7 +100,7 @@ const DataGrid: DataGridComponents<Omit<Theme, 'components'>>['MuiDataGrid'] = {
         overflowY: 'hidden',
       },
     }),
-    selectedRowCount: ({}) => ({
+    selectedRowCount: () => ({
       display: 'none',
     }),
   },
