@@ -4,7 +4,7 @@ const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080/api
 
 const apiClient = axios.create({
     baseURL: API_BASE_URL,
-    timeout: 4500,
+    timeout: 1500,
     headers: {
         'Content-Type': 'application/json',
     },
@@ -114,6 +114,20 @@ apiClient.interceptors.request.use((config) => {
     const token = localStorage.getItem('token');
     if (token && config.headers) {
         config.headers.Authorization = `Bearer ${token}`;
+    }
+    // Dual-Mode Architecture:
+    // 1. If REACT_APP_API_URL is configured (or running on localhost with backend), connect to real API Gateway (:8080) with automatic fallback.
+    // 2. If deployed on Vercel without REACT_APP_API_URL yet, resolve in 0ms via local persistence until the backend is deployed.
+    const isRemoteHostWithoutApiEnv =
+        typeof window !== 'undefined' &&
+        window.location.hostname !== 'localhost' &&
+        window.location.hostname !== '127.0.0.1' &&
+        !process.env.REACT_APP_API_URL;
+
+    if (isRemoteHostWithoutApiEnv) {
+        (config as any).adapter = async (cfg: any) => {
+            return Promise.reject({ config: cfg, response: undefined });
+        };
     }
     return config;
 });
